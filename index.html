@@ -561,11 +561,10 @@
 
         <textarea
           id="chatInput"
-          placeholder="Ask your Learning Assistant..."
-          disabled></textarea>
+          placeholder="Ask your Learning Assistant..."></textarea>
 
-        <button disabled>
-          Connect AI Assistant Next
+        <button id="sendButton">
+          Send
         </button>
 
       </div>
@@ -624,6 +623,134 @@
 
 
   updateProgress();
+
+  const WORKER_URL =
+  "https://learning-assistant.kbptimetech.workers.dev";
+
+const chatInput = document.getElementById("chatInput");
+const sendButton = document.getElementById("sendButton");
+const chat = document.getElementById("chat");
+
+
+function addMessage(text, type) {
+
+  const message = document.createElement("div");
+
+  message.className =
+    "message " +
+    (type === "assistant"
+      ? "assistant-message"
+      : "user-message");
+
+  if (type === "user") {
+    message.style.background = "#245fd1";
+    message.style.color = "white";
+    message.style.marginLeft = "35px";
+  }
+
+  message.textContent = text;
+
+  chat.appendChild(message);
+
+  chat.scrollTop = chat.scrollHeight;
+}
+
+
+async function sendMessage() {
+
+  const text = chatInput.value.trim();
+
+  if (!text) return;
+
+  addMessage(text, "user");
+
+  chatInput.value = "";
+
+  sendButton.disabled = true;
+  sendButton.textContent = "Thinking...";
+
+  try {
+
+    const response = await fetch(WORKER_URL, {
+
+      method: "POST",
+
+      headers: {
+        "Content-Type": "application/json"
+      },
+
+      body: JSON.stringify({
+        message: text
+      })
+
+    });
+
+
+    const data = await response.json();
+
+
+    if (!response.ok) {
+
+      console.error(data);
+
+      addMessage(
+        "Something went wrong connecting to the Learning Assistant.",
+        "assistant"
+      );
+
+      return;
+    }
+
+
+    addMessage(
+      data.answer || "No response received.",
+      "assistant"
+    );
+
+
+  } catch (error) {
+
+    console.error(error);
+
+    addMessage(
+      "I couldn't reach the Learning Assistant.",
+      "assistant"
+    );
+
+  } finally {
+
+    sendButton.disabled = false;
+    sendButton.textContent = "Send";
+
+    chatInput.focus();
+
+  }
+}
+
+
+sendButton.addEventListener(
+  "click",
+  sendMessage
+);
+
+
+chatInput.addEventListener(
+  "keydown",
+  event => {
+
+    if (
+      event.key === "Enter" &&
+      !event.shiftKey
+    ) {
+
+      event.preventDefault();
+
+      sendMessage();
+
+    }
+
+  }
+);
 
 </script>
 
