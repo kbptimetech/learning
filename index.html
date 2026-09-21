@@ -3,10 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <title>My Learning Hub</title>
 
   <style>
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
 
     body {
       margin: 0;
@@ -64,7 +67,7 @@
 
     .hero p {
       color: #e8f0f5;
-      max-width: 750px;
+      max-width: 780px;
       line-height: 1.55;
     }
 
@@ -138,20 +141,39 @@
       transition: width 0.25s ease;
     }
 
+    .plan-section {
+      margin-bottom: 28px;
+    }
+
+    .plan-section:last-child {
+      margin-bottom: 0;
+    }
+
+    .plan-section h3 {
+      margin-bottom: 12px;
+      font-size: 17px;
+    }
+
     .learning-row {
       display: flex;
       gap: 12px;
       padding: 12px 0;
       border-bottom: 1px solid #f0f2f5;
+      align-items: flex-start;
     }
 
     .learning-row:last-child {
       border-bottom: none;
     }
 
-    input[type="checkbox"] {
-      margin-top: 3px;
+    .learning-row input[type="checkbox"] {
+      margin-top: 4px;
       transform: scale(1.15);
+    }
+
+    .learning-row.completed strong {
+      text-decoration: line-through;
+      color: #667085;
     }
 
     .assistant {
@@ -183,6 +205,16 @@
       font-size: 12px;
     }
 
+    .policy-box {
+      background: #f1f6ff;
+      border: 1px solid #d8e5ff;
+      color: #35517c;
+      font-size: 12px;
+      padding: 10px 12px;
+      border-radius: 9px;
+      margin-top: 10px;
+    }
+
     .chat {
       flex: 1;
       overflow-y: auto;
@@ -196,6 +228,7 @@
       margin-bottom: 12px;
       line-height: 1.45;
       font-size: 14px;
+      white-space: pre-wrap;
     }
 
     .assistant-message {
@@ -203,14 +236,17 @@
       border: 1px solid #e5e7eb;
     }
 
-    .policy-box {
-      background: #f1f6ff;
-      border: 1px solid #d8e5ff;
-      color: #35517c;
-      font-size: 12px;
-      padding: 10px 12px;
-      border-radius: 9px;
-      margin-top: 10px;
+    .user-message {
+      background: #245fd1;
+      color: white;
+      margin-left: 35px;
+    }
+
+    .proposal-actions {
+      margin-top: 12px;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
     }
 
     .composer {
@@ -242,18 +278,24 @@
       cursor: pointer;
     }
 
+    button.secondary {
+      background: #6b7280;
+    }
+
+    button.inline-button {
+      width: auto;
+      padding: 8px 12px;
+      margin-top: 0;
+    }
+
     button:disabled {
       opacity: 0.55;
       cursor: not-allowed;
     }
 
-    .question {
-      padding: 8px 0;
-      border-bottom: 1px solid #f1f2f4;
-    }
-
-    .question:last-child {
-      border-bottom: none;
+    .status {
+      color: #667085;
+      font-size: 13px;
     }
 
     @media (max-width: 950px) {
@@ -283,18 +325,23 @@
 
     <section class="hero">
       <span class="tag">CURRENT SUBJECT</span>
-      <h2>Idiopathic Pulmonary Fibrosis</h2>
+
+      <h2 id="subjectTitle">
+        Idiopathic Pulmonary Fibrosis
+      </h2>
 
       <p>
-        Goal: develop enough scientific, clinical, commercial and investment
-        judgment to evaluate fibrosis drugs, companies and opportunities independently.
+        Goal: build scientific, clinical, commercial, BD and investment judgment
+        needed to evaluate fibrosis drugs, companies, transactions and opportunities.
       </p>
 
       <div class="progress-shell">
         <div class="progress-bar" id="progressBar"></div>
       </div>
 
-      <p id="progressText" class="small"></p>
+      <p id="progressText" class="small">
+        Loading learning plan...
+      </p>
     </section>
 
 
@@ -304,212 +351,51 @@
       <h3>Latest IPF intelligence</h3>
 
       <p>
-        This will become the top-priority feed for new:
+        This will become the top-priority feed for:
       </p>
 
       <p class="small">
-        Clinical readouts · FDA decisions · pipeline changes · biotech deals ·
-        financings · important publications · podcasts · executive interviews
+        Clinical readouts · FDA decisions · pipeline changes · licensing deals ·
+        acquisitions · financings · important publications · podcasts · executive interviews
       </p>
 
       <p class="small">
-        Automatic monitoring will be activated after the core site and AI assistant are connected.
+        Automatic monitoring is the next major feature after the learning-plan system is complete.
       </p>
     </section>
 
 
     <h2 class="section-title">▶ Continue Learning</h2>
 
-<section class="card current-card" id="currentLearningCard">
+    <section class="card current-card" id="currentLearningCard">
 
-  <span class="tag" id="currentTag">CURRENT MODULE</span>
+      <span class="tag" id="currentTag">
+        CURRENT MODULE
+      </span>
 
-  <h3 id="currentTitle" style="margin-top:10px;"></h3>
+      <h3 id="currentTitle" style="margin-top:10px;">
+        Loading...
+      </h3>
 
-  <p id="currentDescription"></p>
+      <p id="currentDescription"></p>
 
-  <p>
-    <a id="currentLink" href="#" target="_blank">
-      Open learning resource →
-    </a>
-  </p>
+      <p>
+        <a
+          id="currentLink"
+          href="#"
+          target="_blank"
+          style="display:none;">
+          Open learning resource →
+        </a>
+      </p>
 
-</section>
+    </section>
 
 
-    <h2 class="section-title">📚 IPF Learning Plan</h2>
+    <h2 class="section-title">📚 IPF Commercial & BD Learning Plan</h2>
 
     <section class="card" id="learningPlan">
-
-      <div class="learning-row">
-        <input type="checkbox" data-id="foundation" checked>
-        <div>
-          <strong>Disease foundation</strong>
-          <div class="small">Lederer & Martinez — completed</div>
-        </div>
-      </div>
-
-      <div class="learning-row">
-        <input type="checkbox" data-id="current-treatments" checked>
-        <div>
-          <strong>Current treatments</strong>
-          <div class="small">
-            Pirfenidone · Nintedanib · Nerandomilast
-          </div>
-        </div>
-      </div>
-
-      <div class="learning-row">
-        <input type="checkbox" data-id="clinical-endpoints">
-        <div>
-          <strong>Clinical endpoints</strong>
-          <div class="small">
-            FVC · % predicted FVC · DLCO · 6MWT · exacerbations · mortality
-          </div>
-        </div>
-      </div>
-
-      <div class="learning-row">
-        <input type="checkbox" data-id="failures">
-        <div>
-          <strong>Historical failures</strong>
-          <div class="small">
-            Ziritaxestat · PRM-151 · Pamrevlumab · Simtuzumab · PANTHER-IPF
-          </div>
-        </div>
-      </div>
-
-      <div class="learning-row">
-        <input type="checkbox" data-id="biology">
-        <div>
-          <strong>Core disease biology</strong>
-          <div class="small">
-            Epithelial injury → abnormal repair → fibroblasts →
-            myofibroblasts → extracellular matrix
-          </div>
-        </div>
-      </div>
-
-      <div class="learning-row">
-        <input type="checkbox" data-id="pathways">
-        <div>
-          <strong>Major fibrosis pathways</strong>
-          <div class="small">
-            TGF-β · LPA/autotaxin/LPA1 · Wnt · Hedgehog · PDE4B · AT2R · STAT3
-          </div>
-        </div>
-      </div>
-
-      <div class="learning-row">
-        <input type="checkbox" data-id="pipeline">
-        <div>
-          <strong>Active IPF pipeline</strong>
-          <div class="small">
-            Admilparant · Buloxibutid · Rentosertib · ENV-101 · LTI-03
-          </div>
-        </div>
-      </div>
-
-      <div class="learning-row">
-        <input type="checkbox" data-id="development">
-        <div>
-          <strong>Clinical development</strong>
-          <div class="small">
-            Trial design · Phase II vs III · background treatment · effect sizes
-          </div>
-        </div>
-      </div>
-
-      <div class="learning-row">
-        <input type="checkbox" data-id="regulatory">
-        <div>
-          <strong>Regulatory strategy</strong>
-          <div class="small">
-            FDA precedent · endpoints · monotherapy · add-on therapy
-          </div>
-        </div>
-      </div>
-
-      <div class="learning-row">
-        <input type="checkbox" data-id="commercial">
-        <div>
-          <strong>Commercial landscape</strong>
-          <div class="small">
-            Prevalence · treatment rates · pricing · sales · TAM · PPF expansion
-          </div>
-        </div>
-      </div>
-
-      <div class="learning-row">
-        <input type="checkbox" data-id="investor">
-        <div>
-          <strong>Investor / company-builder judgment</strong>
-          <div class="small">
-            Biology → evidence → differentiation → valuation → ownership opportunity
-          </div>
-        </div>
-      </div>
-
-    </section>
-
-
-    <h2 class="section-title">☠️ Failure Library</h2>
-
-    <section class="card">
-      <h3>Ziritaxestat</h3>
-      <p class="small">Autotaxin inhibitor · LPA pathway</p>
-      <p>
-        Phase II optimism followed by failure of ISABELA 1 and ISABELA 2.
-      </p>
-    </section>
-
-    <section class="card">
-      <h3>Zinpentraxin alfa / PRM-151</h3>
-      <p class="small">Pentraxin-2 · fibrocyte/macrophage biology</p>
-    </section>
-
-    <section class="card">
-      <h3>Pamrevlumab</h3>
-      <p class="small">CTGF / CCN2 inhibition</p>
-    </section>
-
-    <section class="card">
-      <h3>Simtuzumab</h3>
-      <p class="small">LOXL2 inhibition · extracellular matrix biology</p>
-    </section>
-
-    <section class="card">
-      <h3>PANTHER-IPF</h3>
-      <p class="small">
-        Prednisone + azathioprine + NAC · major paradigm-changing failure
-      </p>
-    </section>
-
-
-    <h2 class="section-title">❓ Questions I'm Trying to Answer</h2>
-
-    <section class="card">
-
-      <div class="question">
-        Why did autotaxin inhibition fail if LPA biology matters?
-      </div>
-
-      <div class="question">
-        Why might LPA1 inhibition succeed where ziritaxestat failed?
-      </div>
-
-      <div class="question">
-        What does 100 mL of preserved FVC actually mean clinically?
-      </div>
-
-      <div class="question">
-        What would genuine disease stabilization look like?
-      </div>
-
-      <div class="question">
-        Can established pulmonary fibrosis actually be reversed?
-      </div>
-
+      <p class="status">Loading learning plan...</p>
     </section>
 
   </main>
@@ -520,37 +406,49 @@
     <section class="assistant">
 
       <div class="assistant-header">
+
         <h2>💬 Learning Assistant</h2>
-        <p>Ask about IPF, papers, drugs, biology or your learning plan.</p>
+
+        <p>
+          Ask about IPF, drugs, markets, deals, clinical data or your learning plan.
+        </p>
 
         <div class="policy-box">
-          Chatting never changes your learning plan automatically.
-          Updates require an explicit request and confirmation.
+          Normal chat never changes your learning plan.
+          Updates require an explicit request and your confirmation.
         </div>
+
       </div>
+
 
       <div class="chat" id="chat">
 
         <div class="message assistant-message">
-          <strong>Learning Assistant</strong><br><br>
+          <strong>Learning Assistant</strong>
 
-          I’ll eventually be able to answer questions here using your learning context.
+          <br><br>
+
+          I can help you learn IPF from a commercial, BD, clinical and investor perspective.
 
           <br><br>
 
           Examples:
+
           <br><br>
 
-          “Explain why ziritaxestat failed.”
+          “Explain OFEV's commercial history.”
           <br>
-          “Quiz me on IPF biology.”
+          “What makes an IPF Phase II result partnerable?”
           <br>
-          “Compare admilparant with ziritaxestat.”
+          “Add a module on IPF licensing deals.”
           <br>
-          “I finished this paper. Update my learning plan.”
+          “Move pricing before epidemiology.”
+          <br>
+          “Mark the market-size module complete.”
         </div>
 
       </div>
+
 
       <div class="composer">
 
@@ -571,175 +469,15 @@
 </div>
 
 
-  <script>
-
-const checkboxes =
-  document.querySelectorAll('input[type="checkbox"][data-id]');
-
-checkboxes.forEach(box => {
-
-  const saved =
-    localStorage.getItem("learning-" + box.dataset.id);
-
-  if (saved !== null) {
-    box.checked = saved === "true";
-  }
-
-  box.addEventListener("change", () => {
-
-    localStorage.setItem(
-      "learning-" + box.dataset.id,
-      box.checked
-    );
-
-    updateProgress();
-  });
-});
-
-
-function updateProgress() {
-
-  const total = checkboxes.length;
-
-  const complete =
-    [...checkboxes].filter(box => box.checked).length;
-
-  const percentage =
-    Math.round((complete / total) * 100);
-
-  document.getElementById("progressBar").style.width =
-    percentage + "%";
-
-  document.getElementById("progressText").textContent =
-    complete + " of " + total +
-    " major modules completed (" +
-    percentage + "%)";
-}
-
-
-updateProgress();
-
+<script>
 
 const WORKER_URL =
   "https://learning-assistant.kbptimetech.workers.dev";
 
-const learningItems = [
 
-  {
-    id: "ziritaxestat",
-    title: "Ziritaxestat — Why did it fail?",
-    parentModule: "failures",
-    description:
-      "Understand why compelling autotaxin/LPA biology and clear target engagement failed to translate into Phase III efficacy.",
-    resourceUrl:
-      "https://jamanetwork.com/journals/jama/fullarticle/2804605"
-  },
+let currentPlan = null;
+let pendingChanges = null;
 
-  {
-    id: "lpa-biology",
-    title: "Understand the LPA / Autotaxin / LPA1 pathway",
-    parentModule: "pathways",
-    description:
-      "Build the biological model connecting autotaxin, lysophosphatidic acid, LPA receptors, fibroblast activation and pulmonary fibrosis.",
-    resourceUrl:
-      "https://pmc.ncbi.nlm.nih.gov/articles/PMC12991008/"
-  },
-
-  {
-    id: "admilparant-comparison",
-    title: "Why might admilparant succeed where ziritaxestat failed?",
-    parentModule: "pipeline",
-    description:
-      "Compare upstream autotaxin inhibition with selective LPA1 receptor inhibition and develop your own investment thesis.",
-    resourceUrl:
-      "https://clinicaltrials.gov/study/NCT06003426"
-  },
-
-  {
-    id: "prm151",
-    title: "Failure #2 — Zinpentraxin alfa / PRM-151",
-    parentModule: "failures",
-    description:
-      "Study another case where encouraging Phase II evidence failed to reproduce in Phase III.",
-    resourceUrl:
-      "https://clinicaltrials.gov/"
-  }
-
-];
-
-function isItemComplete(id) {
-
-  return (
-    localStorage.getItem(
-      "learning-" + id
-    ) === "true"
-  );
-
-}
-
-
-function getCurrentItem() {
-
-  return learningItems.find(
-    item => !isItemComplete(item.id)
-  ) || null;
-
-}
-
-
-function renderCurrentItem() {
-
-  const item =
-    getCurrentItem();
-
-  const title =
-    document.getElementById("currentTitle");
-
-  const description =
-    document.getElementById("currentDescription");
-
-  const link =
-    document.getElementById("currentLink");
-
-  const tag =
-    document.getElementById("currentTag");
-
-
-  if (!item) {
-
-    tag.textContent =
-      "COMPLETE";
-
-    title.textContent =
-      "Current learning sequence completed";
-
-    description.textContent =
-      "You have completed all items in the current learning sequence.";
-
-    link.style.display =
-      "none";
-
-    return;
-  }
-
-
-  tag.textContent =
-    "CURRENT MODULE";
-
-  title.textContent =
-    item.title;
-
-  description.textContent =
-    item.description;
-
-  link.href =
-    item.resourceUrl;
-
-  link.style.display =
-    "inline";
-}
-
-    renderCurrentItem();
 
 const chatInput =
   document.getElementById("chatInput");
@@ -750,89 +488,474 @@ const sendButton =
 const chat =
   document.getElementById("chat");
 
-let pendingChanges = null;
 
 
+async function loadPlan() {
 
-function getLearningState() {
+  try {
 
-  const modules = {};
+    const response = await fetch(
+      WORKER_URL + "/plan"
+    );
 
-  document
-    .querySelectorAll(
-      'input[type="checkbox"][data-id]'
-    )
-    .forEach(box => {
-
-      modules[box.dataset.id] = {
-        complete: box.checked
-      };
-
-    });
+    const data =
+      await response.json();
 
 
-  const current =
-    getCurrentItem();
+    if (!response.ok) {
+      throw new Error(
+        data.error || "Unable to load plan"
+      );
+    }
 
 
-  return {
+    currentPlan =
+      data.plan;
 
-    subject:
-      "Idiopathic Pulmonary Fibrosis",
 
-    currentItem:
-      current
-        ? {
-            id: current.id,
-            title: current.title,
-            parentModule:
-              current.parentModule,
-            complete: false
-          }
-        : null,
+    renderPlan();
 
-    learningItems:
-      learningItems.map(item => ({
-        id: item.id,
-        title: item.title,
-        parentModule:
-          item.parentModule,
-        complete:
-          isItemComplete(item.id)
-      })),
+  } catch (error) {
 
-    modules
-  };
+    console.error(error);
+
+    document.getElementById(
+      "learningPlan"
+    ).innerHTML =
+      "<p>Unable to load the learning plan.</p>";
+
+  }
 }
 
 
 
-function addMessage(text, type) {
+function getAllItems() {
 
-  const message =
-    document.createElement("div");
-
-  message.className =
-    "message " +
-    (
-      type === "assistant"
-        ? "assistant-message"
-        : "user-message"
-    );
+  if (!currentPlan) {
+    return [];
+  }
 
 
-  if (type === "user") {
+  const items = [];
 
-    message.style.background = "#245fd1";
-    message.style.color = "white";
-    message.style.marginLeft = "35px";
+
+  for (
+    const section
+    of currentPlan.sections || []
+  ) {
+
+    for (
+      const item
+      of section.items || []
+    ) {
+
+      items.push({
+        ...item,
+        sectionKey:
+          section.sectionKey,
+        sectionTitle:
+          section.title
+      });
+
+    }
 
   }
 
 
-  message.textContent = text;
+  return items;
+}
 
-  chat.appendChild(message);
+
+
+function getCurrentItem() {
+
+  const items =
+    getAllItems();
+
+
+  return (
+    items.find(
+      item => !item.completed
+    )
+    || null
+  );
+}
+
+
+
+function renderPlan() {
+
+  renderSubject();
+
+  renderProgress();
+
+  renderCurrentItem();
+
+  renderLearningPlan();
+
+}
+
+
+
+function renderSubject() {
+
+  if (!currentPlan) {
+    return;
+  }
+
+
+  document.getElementById(
+    "subjectTitle"
+  ).textContent =
+    currentPlan.subject
+    || "Learning Plan";
+}
+
+
+
+function renderProgress() {
+
+  const items =
+    getAllItems();
+
+
+  const total =
+    items.length;
+
+
+  const completed =
+    items.filter(
+      item => item.completed
+    ).length;
+
+
+  const percentage =
+    total === 0
+      ? 0
+      : Math.round(
+          (completed / total) * 100
+        );
+
+
+  document.getElementById(
+    "progressBar"
+  ).style.width =
+    percentage + "%";
+
+
+  document.getElementById(
+    "progressText"
+  ).textContent =
+    completed
+    + " of "
+    + total
+    + " learning items completed ("
+    + percentage
+    + "%)";
+}
+
+
+
+function renderCurrentItem() {
+
+  const item =
+    getCurrentItem();
+
+
+  const tag =
+    document.getElementById(
+      "currentTag"
+    );
+
+  const title =
+    document.getElementById(
+      "currentTitle"
+    );
+
+  const description =
+    document.getElementById(
+      "currentDescription"
+    );
+
+  const link =
+    document.getElementById(
+      "currentLink"
+    );
+
+
+  if (!item) {
+
+    tag.textContent =
+      "COMPLETE";
+
+    title.textContent =
+      "Learning plan completed";
+
+    description.textContent =
+      "You have completed all items in the current learning plan.";
+
+    link.style.display =
+      "none";
+
+    return;
+
+  }
+
+
+  tag.textContent =
+    item.sectionTitle
+      ? item.sectionTitle.toUpperCase()
+      : "CURRENT MODULE";
+
+
+  title.textContent =
+    item.title;
+
+
+  description.textContent =
+    item.description || "";
+
+
+  if (item.resourceUrl) {
+
+    link.href =
+      item.resourceUrl;
+
+    link.style.display =
+      "inline";
+
+  } else {
+
+    link.style.display =
+      "none";
+
+  }
+}
+
+
+
+function renderLearningPlan() {
+
+  const container =
+    document.getElementById(
+      "learningPlan"
+    );
+
+
+  container.innerHTML = "";
+
+
+  if (!currentPlan) {
+
+    container.innerHTML =
+      "<p>Loading learning plan...</p>";
+
+    return;
+
+  }
+
+
+  for (
+    const section
+    of currentPlan.sections || []
+  ) {
+
+    const sectionWrapper =
+      document.createElement("div");
+
+    sectionWrapper.className =
+      "plan-section";
+
+
+    const heading =
+      document.createElement("h3");
+
+    heading.textContent =
+      section.title;
+
+
+    sectionWrapper.appendChild(
+      heading
+    );
+
+
+    if (
+      !section.items
+      || section.items.length === 0
+    ) {
+
+      const empty =
+        document.createElement("p");
+
+      empty.className =
+        "small";
+
+      empty.textContent =
+        "No learning items yet.";
+
+      sectionWrapper.appendChild(
+        empty
+      );
+
+    }
+
+
+    for (
+      const item
+      of section.items || []
+    ) {
+
+      const row =
+        document.createElement("div");
+
+      row.className =
+        "learning-row"
+        + (
+          item.completed
+            ? " completed"
+            : ""
+        );
+
+
+      const checkbox =
+        document.createElement("input");
+
+      checkbox.type =
+        "checkbox";
+
+      checkbox.checked =
+        !!item.completed;
+
+
+      checkbox.addEventListener(
+        "change",
+        () => {
+
+          checkbox.checked =
+            !!item.completed;
+
+          addMessage(
+            `To change "${item.title}", ask me explicitly to update the learning plan.`,
+            "assistant"
+          );
+
+        }
+      );
+
+
+      const text =
+        document.createElement("div");
+
+
+      const strong =
+        document.createElement("strong");
+
+      strong.textContent =
+        item.title;
+
+
+      const small =
+        document.createElement("div");
+
+      small.className =
+        "small";
+
+      small.textContent =
+        item.description || "";
+
+
+      text.appendChild(
+        strong
+      );
+
+      text.appendChild(
+        small
+      );
+
+
+      if (item.resourceUrl) {
+
+        const resource =
+          document.createElement("div");
+
+        resource.style.marginTop =
+          "5px";
+
+
+        const anchor =
+          document.createElement("a");
+
+        anchor.href =
+          item.resourceUrl;
+
+        anchor.target =
+          "_blank";
+
+        anchor.textContent =
+          "Open resource →";
+
+
+        resource.appendChild(
+          anchor
+        );
+
+        text.appendChild(
+          resource
+        );
+
+      }
+
+
+      row.appendChild(
+        checkbox
+      );
+
+      row.appendChild(
+        text
+      );
+
+      sectionWrapper.appendChild(
+        row
+      );
+
+    }
+
+
+    container.appendChild(
+      sectionWrapper
+    );
+
+  }
+}
+
+
+
+function addMessage(
+  text,
+  type
+) {
+
+  const message =
+    document.createElement("div");
+
+
+  message.className =
+    "message "
+    + (
+      type === "user"
+        ? "user-message"
+        : "assistant-message"
+    );
+
+
+  message.textContent =
+    text;
+
+
+  chat.appendChild(
+    message
+  );
+
 
   chat.scrollTop =
     chat.scrollHeight;
@@ -840,10 +963,14 @@ function addMessage(text, type) {
 
 
 
-function addProposal(answer, changes) {
+function addProposal(
+  answer,
+  changes
+) {
 
   const wrapper =
     document.createElement("div");
+
 
   wrapper.className =
     "message assistant-message";
@@ -852,53 +979,67 @@ function addProposal(answer, changes) {
   const text =
     document.createElement("div");
 
-  text.textContent = answer;
 
-  wrapper.appendChild(text);
+  text.textContent =
+    answer
+    || "Proposed learning-plan change:";
+
+
+  wrapper.appendChild(
+    text
+  );
 
 
   const actions =
     document.createElement("div");
 
-  actions.style.marginTop = "12px";
-  actions.style.display = "flex";
-  actions.style.gap = "8px";
+
+  actions.className =
+    "proposal-actions";
 
 
   const confirm =
     document.createElement("button");
 
+
+  confirm.className =
+    "inline-button";
+
+
   confirm.textContent =
     "Confirm changes";
-
-  confirm.style.width = "auto";
-  confirm.style.padding = "8px 12px";
 
 
   const cancel =
     document.createElement("button");
 
-  cancel.textContent = "Cancel";
-  cancel.style.width = "auto";
-  cancel.style.padding = "8px 12px";
-  cancel.style.background = "#6b7280";
+
+  cancel.className =
+    "inline-button secondary";
+
+
+  cancel.textContent =
+    "Cancel";
 
 
   confirm.addEventListener(
     "click",
-    () => {
+    async () => {
 
-      applyChanges(changes);
+      confirm.disabled =
+        true;
 
-      pendingChanges = null;
+      cancel.disabled =
+        true;
 
-      confirm.disabled = true;
-      cancel.disabled = true;
 
-      addMessage(
-        "Learning plan updated.",
-        "assistant"
+      await applyChanges(
+        changes
       );
+
+
+      pendingChanges =
+        null;
 
     }
   );
@@ -908,10 +1049,16 @@ function addProposal(answer, changes) {
     "click",
     () => {
 
-      pendingChanges = null;
+      confirm.disabled =
+        true;
 
-      confirm.disabled = true;
-      cancel.disabled = true;
+      cancel.disabled =
+        true;
+
+
+      pendingChanges =
+        null;
+
 
       addMessage(
         "No changes were made.",
@@ -922,12 +1069,24 @@ function addProposal(answer, changes) {
   );
 
 
-  actions.appendChild(confirm);
-  actions.appendChild(cancel);
+  actions.appendChild(
+    confirm
+  );
 
-  wrapper.appendChild(actions);
+  actions.appendChild(
+    cancel
+  );
 
-  chat.appendChild(wrapper);
+
+  wrapper.appendChild(
+    actions
+  );
+
+
+  chat.appendChild(
+    wrapper
+  );
+
 
   chat.scrollTop =
     chat.scrollHeight;
@@ -935,73 +1094,15 @@ function addProposal(answer, changes) {
 
 
 
-function applyChanges(changes) {
-
-  for (const change of changes) {
-
-    if (change.action === "setComplete") {
-
-      const checkbox =
-        document.querySelector(
-          `input[data-id="${change.id}"]`
-        );
-
-
-      if (checkbox) {
-
-        checkbox.checked =
-          !!change.value;
-
-        localStorage.setItem(
-          "learning-" + change.id,
-          checkbox.checked
-        );
-
-      } else {
-
-        localStorage.setItem(
-          "learning-" + change.id,
-          !!change.value
-        );
-
-      }
-
-    }
-
-  }
-
-  updateProgress();
-  renderCurrentItem();
-}
-
-
-
-async function sendMessage() {
-
-  const text =
-    chatInput.value.trim();
-
-  if (!text) return;
-
-
-  addMessage(
-    text,
-    "user"
-  );
-
-
-  chatInput.value = "";
-
-  sendButton.disabled = true;
-  sendButton.textContent =
-    "Thinking...";
-
+async function applyChanges(
+  changes
+) {
 
   try {
 
     const response =
       await fetch(
-        WORKER_URL,
+        WORKER_URL + "/apply",
         {
 
           method: "POST",
@@ -1012,12 +1113,7 @@ async function sendMessage() {
           },
 
           body: JSON.stringify({
-
-            message: text,
-
-            learningState:
-              getLearningState()
-
+            changes
           })
 
         }
@@ -1033,39 +1129,139 @@ async function sendMessage() {
       console.error(data);
 
       addMessage(
+        "Something went wrong applying the learning-plan changes.",
+        "assistant"
+      );
+
+      return;
+
+    }
+
+
+    currentPlan =
+      data.plan;
+
+
+    renderPlan();
+
+
+    addMessage(
+      "Learning plan updated.",
+      "assistant"
+    );
+
+  } catch (error) {
+
+    console.error(error);
+
+
+    addMessage(
+      "I couldn't apply the learning-plan changes.",
+      "assistant"
+    );
+
+  }
+}
+
+
+
+async function sendMessage() {
+
+  const text =
+    chatInput.value.trim();
+
+
+  if (!text) {
+    return;
+  }
+
+
+  addMessage(
+    text,
+    "user"
+  );
+
+
+  chatInput.value =
+    "";
+
+
+  sendButton.disabled =
+    true;
+
+
+  sendButton.textContent =
+    "Thinking...";
+
+
+  try {
+
+    const response =
+      await fetch(
+        WORKER_URL + "/chat",
+        {
+
+          method: "POST",
+
+          headers: {
+            "Content-Type":
+              "application/json"
+          },
+
+          body: JSON.stringify({
+            message: text
+          })
+
+        }
+      );
+
+
+    const data =
+      await response.json();
+
+
+    if (!response.ok) {
+
+      console.error(data);
+
+
+      addMessage(
         "Something went wrong connecting to the Learning Assistant.",
         "assistant"
       );
 
       return;
+
     }
 
 
-    if (data.type === "proposal") {
+    if (
+      data.type === "proposal"
+    ) {
 
       pendingChanges =
         data.changes || [];
 
+
       addProposal(
-        data.answer ||
-          "Proposed learning-plan update:",
+        data.answer,
         pendingChanges
       );
 
     } else {
 
       addMessage(
-        data.answer ||
-          "No response received.",
+        data.answer
+        || "No response received.",
         "assistant"
       );
 
     }
 
-
   } catch (error) {
 
     console.error(error);
+
 
     addMessage(
       "I couldn't reach the Learning Assistant.",
@@ -1074,10 +1270,13 @@ async function sendMessage() {
 
   } finally {
 
-    sendButton.disabled = false;
+    sendButton.disabled =
+      false;
+
 
     sendButton.textContent =
       "Send";
+
 
     chatInput.focus();
 
@@ -1092,13 +1291,14 @@ sendButton.addEventListener(
 );
 
 
+
 chatInput.addEventListener(
   "keydown",
   event => {
 
     if (
-      event.key === "Enter" &&
-      !event.shiftKey
+      event.key === "Enter"
+      && !event.shiftKey
     ) {
 
       event.preventDefault();
@@ -1109,6 +1309,10 @@ chatInput.addEventListener(
 
   }
 );
+
+
+
+loadPlan();
 
 </script>
 
