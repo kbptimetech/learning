@@ -618,7 +618,6 @@ function updateProgress() {
 
 
 updateProgress();
-renderCurrentItem();
 
 
 const WORKER_URL =
@@ -739,6 +738,8 @@ function renderCurrentItem() {
   link.style.display =
     "inline";
 }
+
+    renderCurrentItem();
 
 const chatInput =
   document.getElementById("chatInput");
