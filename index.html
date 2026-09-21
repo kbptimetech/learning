@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Learning Hub</title>
+
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+      background: #f5f7fa;
+      color: #182230;
+    }
+
+    header {
+      background: #ffffff;
+      border-bottom: 1px solid #e5e7eb;
+      padding: 20px 32px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 24px;
+    }
+
+    header p {
+      margin: 4px 0 0;
+      color: #667085;
+      font-size: 14px;
+    }
+
+    .layout {
+      max-width: 1450px;
+      margin: 0 auto;
+      padding: 28px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 390px;
+      gap: 24px;
+    }
+
+    .main-column,
+    .assistant-column {
+      min-width: 0;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, #16324f, #245c76);
+      color: white;
+      border-radius: 16px;
+      padding: 28px;
+      margin-bottom: 24px;
+    }
+
+    .hero h2 {
+      margin: 6px 0 8px;
+      font-size: 30px;
+    }
+
+    .hero p {
+      color: #e8f0f5;
+      max-width: 750px;
+      line-height: 1.55;
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 5px 9px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+      background: #e8eefc;
+      color: #3157a5;
+    }
+
+    .hero .tag {
+      background: rgba(255,255,255,0.15);
+      color: white;
+    }
+
+    .section-title {
+      font-size: 19px;
+      margin: 26px 0 12px;
+    }
+
+    .card {
+      background: #ffffff;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 18px;
+      margin-bottom: 12px;
+    }
+
+    .news-card {
+      border-left: 5px solid #d92d20;
+    }
+
+    .current-card {
+      border-left: 5px solid #2e67d1;
+    }
+
+    .card h3 {
+      margin: 0 0 8px;
+    }
+
+    .small {
+      color: #667085;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    a {
+      color: #245fd1;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .progress-shell {
+      height: 9px;
+      background: rgba(255,255,255,0.20);
+      border-radius: 10px;
+      margin-top: 18px;
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      background: white;
+      transition: width 0.25s ease;
+    }
+
+    .learning-row {
+      display: flex;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid #f0f2f5;
+    }
+
+    .learning-row:last-child {
+      border-bottom: none;
+    }
+
+    input[type="checkbox"] {
+      margin-top: 3px;
+      transform: scale(1.15);
+    }
+
+    .assistant {
+      background: #ffffff;
+      border: 1px solid #dfe3e8;
+      border-radius: 16px;
+      overflow: hidden;
+      position: sticky;
+      top: 96px;
+      height: calc(100vh - 125px);
+      min-height: 580px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .assistant-header {
+      padding: 18px;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .assistant-header h2 {
+      margin: 0;
+      font-size: 18px;
+    }
+
+    .assistant-header p {
+      margin: 5px 0 0;
+      color: #667085;
+      font-size: 12px;
+    }
+
+    .chat {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px;
+      background: #fafbfc;
+    }
+
+    .message {
+      padding: 11px 13px;
+      border-radius: 12px;
+      margin-bottom: 12px;
+      line-height: 1.45;
+      font-size: 14px;
+    }
+
+    .assistant-message {
+      background: white;
+      border: 1px solid #e5e7eb;
+    }
+
+    .policy-box {
+      background: #f1f6ff;
+      border: 1px solid #d8e5ff;
+      color: #35517c;
+      font-size: 12px;
+      padding: 10px 12px;
+      border-radius: 9px;
+      margin-top: 10px;
+    }
+
+    .composer {
+      border-top: 1px solid #e5e7eb;
+      padding: 14px;
+      background: white;
+    }
+
+    textarea {
+      width: 100%;
+      resize: vertical;
+      min-height: 80px;
+      max-height: 180px;
+      border: 1px solid #cfd5dd;
+      border-radius: 10px;
+      padding: 11px;
+      font: inherit;
+    }
+
+    button {
+      margin-top: 9px;
+      width: 100%;
+      border: none;
+      background: #245fd1;
+      color: white;
+      padding: 11px;
+      border-radius: 9px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    button:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+
+    .question {
+      padding: 8px 0;
+      border-bottom: 1px solid #f1f2f4;
+    }
+
+    .question:last-child {
+      border-bottom: none;
+    }
+
+    @media (max-width: 950px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .assistant {
+        position: relative;
+        top: 0;
+        height: 600px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <h1>My Learning Hub</h1>
+  <p>A living research and learning system</p>
+</header>
+
+<div class="layout">
+
+  <main class="main-column">
+
+    <section class="hero">
+      <span class="tag">CURRENT SUBJECT</span>
+      <h2>Idiopathic Pulmonary Fibrosis</h2>
+
+      <p>
+        Goal: develop enough scientific, clinical, commercial and investment
+        judgment to evaluate fibrosis drugs, companies and opportunities independently.
+      </p>
+
+      <div class="progress-shell">
+        <div class="progress-bar" id="progressBar"></div>
+      </div>
+
+      <p id="progressText" class="small"></p>
+    </section>
+
+
+    <h2 class="section-title">🔥 What's New in IPF</h2>
+
+    <section class="card news-card">
+      <h3>Latest IPF intelligence</h3>
+
+      <p>
+        This will become the top-priority feed for new:
+      </p>
+
+      <p class="small">
+        Clinical readouts · FDA decisions · pipeline changes · biotech deals ·
+        financings · important publications · podcasts · executive interviews
+      </p>
+
+      <p class="small">
+        Automatic monitoring will be activated after the core site and AI assistant are connected.
+      </p>
+    </section>
+
+
+    <h2 class="section-title">▶ Continue Learning</h2>
+
+    <section class="card current-card">
+      <span class="tag">CURRENT MODULE</span>
+
+      <h3 style="margin-top:10px;">
+        Ziritaxestat — Why did it fail?
+      </h3>
+
+      <p>
+        Understand why compelling autotaxin/LPA biology, clear target engagement
+        and promising early evidence failed to translate into Phase III efficacy.
+      </p>
+
+      <p>
+        <a
+          href="https://jamanetwork.com/journals/jama/fullarticle/2804605"
+          target="_blank">
+          Read the ISABELA Phase III paper →
+        </a>
+      </p>
+    </section>
+
+
+    <h2 class="section-title">📚 IPF Learning Plan</h2>
+
+    <section class="card" id="learningPlan">
+
+      <div class="learning-row">
+        <input type="checkbox" data-id="foundation" checked>
+        <div>
+          <strong>Disease foundation</strong>
+          <div class="small">Lederer & Martinez — completed</div>
+        </div>
+      </div>
+
+      <div class="learning-row">
+        <input type="checkbox" data-id="current-treatments" checked>
+        <div>
+          <strong>Current treatments</strong>
+          <div class="small">
+            Pirfenidone · Nintedanib · Nerandomilast
+          </div>
+        </div>
+      </div>
+
+      <div class="learning-row">
+        <input type="checkbox" data-id="clinical-endpoints">
+        <div>
+          <strong>Clinical endpoints</strong>
+          <div class="small">
+            FVC · % predicted FVC · DLCO · 6MWT · exacerbations · mortality
+          </div>
+        </div>
+      </div>
+
+      <div class="learning-row">
+        <input type="checkbox" data-id="failures">
+        <div>
+          <strong>Historical failures</strong>
+          <div class="small">
+            Ziritaxestat · PRM-151 · Pamrevlumab · Simtuzumab · PANTHER-IPF
+          </div>
+        </div>
+      </div>
+
+      <div class="learning-row">
+        <input type="checkbox" data-id="biology">
+        <div>
+          <strong>Core disease biology</strong>
+          <div class="small">
+            Epithelial injury → abnormal repair → fibroblasts →
+            myofibroblasts → extracellular matrix
+          </div>
+        </div>
+      </div>
+
+      <div class="learning-row">
+        <input type="checkbox" data-id="pathways">
+        <div>
+          <strong>Major fibrosis pathways</strong>
+          <div class="small">
+            TGF-β · LPA/autotaxin/LPA1 · Wnt · Hedgehog · PDE4B · AT2R · STAT3
+          </div>
+        </div>
+      </div>
+
+      <div class="learning-row">
+        <input type="checkbox" data-id="pipeline">
+        <div>
+          <strong>Active IPF pipeline</strong>
+          <div class="small">
+            Admilparant · Buloxibutid · Rentosertib · ENV-101 · LTI-03
+          </div>
+        </div>
+      </div>
+
+      <div class="learning-row">
+        <input type="checkbox" data-id="development">
+        <div>
+          <strong>Clinical development</strong>
+          <div class="small">
+            Trial design · Phase II vs III · background treatment · effect sizes
+          </div>
+        </div>
+      </div>
+
+      <div class="learning-row">
+        <input type="checkbox" data-id="regulatory">
+        <div>
+          <strong>Regulatory strategy</strong>
+          <div class="small">
+            FDA precedent · endpoints · monotherapy · add-on therapy
+          </div>
+        </div>
+      </div>
+
+      <div class="learning-row">
+        <input type="checkbox" data-id="commercial">
+        <div>
+          <strong>Commercial landscape</strong>
+          <div class="small">
+            Prevalence · treatment rates · pricing · sales · TAM · PPF expansion
+          </div>
+        </div>
+      </div>
+
+      <div class="learning-row">
+        <input type="checkbox" data-id="investor">
+        <div>
+          <strong>Investor / company-builder judgment</strong>
+          <div class="small">
+            Biology → evidence → differentiation → valuation → ownership opportunity
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+
+    <h2 class="section-title">☠️ Failure Library</h2>
+
+    <section class="card">
+      <h3>Ziritaxestat</h3>
+      <p class="small">Autotaxin inhibitor · LPA pathway</p>
+      <p>
+        Phase II optimism followed by failure of ISABELA 1 and ISABELA 2.
+      </p>
+    </section>
+
+    <section class="card">
+      <h3>Zinpentraxin alfa / PRM-151</h3>
+      <p class="small">Pentraxin-2 · fibrocyte/macrophage biology</p>
+    </section>
+
+    <section class="card">
+      <h3>Pamrevlumab</h3>
+      <p class="small">CTGF / CCN2 inhibition</p>
+    </section>
+
+    <section class="card">
+      <h3>Simtuzumab</h3>
+      <p class="small">LOXL2 inhibition · extracellular matrix biology</p>
+    </section>
+
+    <section class="card">
+      <h3>PANTHER-IPF</h3>
+      <p class="small">
+        Prednisone + azathioprine + NAC · major paradigm-changing failure
+      </p>
+    </section>
+
+
+    <h2 class="section-title">❓ Questions I'm Trying to Answer</h2>
+
+    <section class="card">
+
+      <div class="question">
+        Why did autotaxin inhibition fail if LPA biology matters?
+      </div>
+
+      <div class="question">
+        Why might LPA1 inhibition succeed where ziritaxestat failed?
+      </div>
+
+      <div class="question">
+        What does 100 mL of preserved FVC actually mean clinically?
+      </div>
+
+      <div class="question">
+        What would genuine disease stabilization look like?
+      </div>
+
+      <div class="question">
+        Can established pulmonary fibrosis actually be reversed?
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <aside class="assistant-column">
+
+    <section class="assistant">
+
+      <div class="assistant-header">
+        <h2>💬 Learning Assistant</h2>
+        <p>Ask about IPF, papers, drugs, biology or your learning plan.</p>
+
+        <div class="policy-box">
+          Chatting never changes your learning plan automatically.
+          Updates require an explicit request and confirmation.
+        </div>
+      </div>
+
+      <div class="chat" id="chat">
+
+        <div class="message assistant-message">
+          <strong>Learning Assistant</strong><br><br>
+
+          I’ll eventually be able to answer questions here using your learning context.
+
+          <br><br>
+
+          Examples:
+          <br><br>
+
+          “Explain why ziritaxestat failed.”
+          <br>
+          “Quiz me on IPF biology.”
+          <br>
+          “Compare admilparant with ziritaxestat.”
+          <br>
+          “I finished this paper. Update my learning plan.”
+        </div>
+
+      </div>
+
+      <div class="composer">
+
+        <textarea
+          id="chatInput"
+          placeholder="Ask your Learning Assistant..."
+          disabled></textarea>
+
+        <button disabled>
+          Connect AI Assistant Next
+        </button>
+
+      </div>
+
+    </section>
+
+  </aside>
+
+</div>
+
+
+<script>
+
+  const checkboxes =
+    document.querySelectorAll('input[type="checkbox"][data-id]');
+
+  checkboxes.forEach(box => {
+
+    const saved =
+      localStorage.getItem("learning-" + box.dataset.id);
+
+    if (saved !== null) {
+      box.checked = saved === "true";
+    }
+
+    box.addEventListener("change", () => {
+
+      localStorage.setItem(
+        "learning-" + box.dataset.id,
+        box.checked
+      );
+
+      updateProgress();
+    });
+  });
+
+
+  function updateProgress() {
+
+    const total = checkboxes.length;
+
+    const complete =
+      [...checkboxes].filter(box => box.checked).length;
+
+    const percentage =
+      Math.round((complete / total) * 100);
+
+    document.getElementById("progressBar").style.width =
+      percentage + "%";
+
+    document.getElementById("progressText").textContent =
+      complete + " of " + total +
+      " major modules completed (" +
+      percentage + "%)";
+  }
+
+
+  updateProgress();
+
+</script>
+
+</body>
+</html>
