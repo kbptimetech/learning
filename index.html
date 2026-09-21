@@ -576,199 +576,267 @@
 </div>
 
 
-<script>
+  <script>
 
-  const checkboxes =
-    document.querySelectorAll('input[type="checkbox"][data-id]');
+const checkboxes =
+  document.querySelectorAll('input[type="checkbox"][data-id]');
 
-  checkboxes.forEach(box => {
+checkboxes.forEach(box => {
 
-    const saved =
-      localStorage.getItem("learning-" + box.dataset.id);
+  const saved =
+    localStorage.getItem("learning-" + box.dataset.id);
 
-    if (saved !== null) {
-      box.checked = saved === "true";
-    }
-
-    box.addEventListener("change", () => {
-
-      localStorage.setItem(
-        "learning-" + box.dataset.id,
-        box.checked
-      );
-
-      updateProgress();
-    });
-  });
-
-
-  function updateProgress() {
-
-    const total = checkboxes.length;
-
-    const complete =
-      [...checkboxes].filter(box => box.checked).length;
-
-    const percentage =
-      Math.round((complete / total) * 100);
-
-    document.getElementById("progressBar").style.width =
-      percentage + "%";
-
-    document.getElementById("progressText").textContent =
-      complete + " of " + total +
-      " major modules completed (" +
-      percentage + "%)";
+  if (saved !== null) {
+    box.checked = saved === "true";
   }
 
+  box.addEventListener("change", () => {
 
-  updateProgress();
+    localStorage.setItem(
+      "learning-" + box.dataset.id,
+      box.checked
+    );
 
-  cconst WORKER_URL =
+    updateProgress();
+  });
+});
+
+
+function updateProgress() {
+
+  const total = checkboxes.length;
+
+  const complete =
+    [...checkboxes].filter(box => box.checked).length;
+
+  const percentage =
+    Math.round((complete / total) * 100);
+
+  document.getElementById("progressBar").style.width =
+    percentage + "%";
+
+  document.getElementById("progressText").textContent =
+    complete + " of " + total +
+    " major modules completed (" +
+    percentage + "%)";
+}
+
+
+updateProgress();
+
+
+
+const WORKER_URL =
   "https://learning-assistant.kbptimetech.workers.dev";
 
-const chatInput = document.getElementById("chatInput");
-const sendButton = document.getElementById("sendButton");
-const chat = document.getElementById("chat");
+const chatInput =
+  document.getElementById("chatInput");
+
+const sendButton =
+  document.getElementById("sendButton");
+
+const chat =
+  document.getElementById("chat");
 
 let pendingChanges = null;
 
 
+
 function getLearningState() {
+
   const modules = {};
 
   document
     .querySelectorAll('input[type="checkbox"][data-id]')
     .forEach(box => {
+
       modules[box.dataset.id] = {
         complete: box.checked
       };
+
     });
 
-return {
-  subject: "Idiopathic Pulmonary Fibrosis",
 
-  currentItem: {
-    id: "ziritaxestat",
-    title: "Ziritaxestat — Why did it fail?",
-    parentModule: "failures",
-    complete:
-      localStorage.getItem("learning-ziritaxestat") === "true"
-  },
+  return {
 
-  modules
-};
+    subject: "Idiopathic Pulmonary Fibrosis",
+
+    currentItem: {
+      id: "ziritaxestat",
+      title: "Ziritaxestat — Why did it fail?",
+      parentModule: "failures",
+      complete:
+        localStorage.getItem(
+          "learning-ziritaxestat"
+        ) === "true"
+    },
+
+    modules
+  };
 }
 
 
+
 function addMessage(text, type) {
-  const message = document.createElement("div");
+
+  const message =
+    document.createElement("div");
 
   message.className =
     "message " +
-    (type === "assistant"
-      ? "assistant-message"
-      : "user-message");
+    (
+      type === "assistant"
+        ? "assistant-message"
+        : "user-message"
+    );
+
 
   if (type === "user") {
+
     message.style.background = "#245fd1";
     message.style.color = "white";
     message.style.marginLeft = "35px";
+
   }
+
 
   message.textContent = text;
 
   chat.appendChild(message);
-  chat.scrollTop = chat.scrollHeight;
+
+  chat.scrollTop =
+    chat.scrollHeight;
 }
 
 
-function addProposal(answer, changes) {
-  const wrapper = document.createElement("div");
-  wrapper.className = "message assistant-message";
 
-  const text = document.createElement("div");
+function addProposal(answer, changes) {
+
+  const wrapper =
+    document.createElement("div");
+
+  wrapper.className =
+    "message assistant-message";
+
+
+  const text =
+    document.createElement("div");
+
   text.textContent = answer;
 
   wrapper.appendChild(text);
 
-  const actions = document.createElement("div");
+
+  const actions =
+    document.createElement("div");
+
   actions.style.marginTop = "12px";
   actions.style.display = "flex";
   actions.style.gap = "8px";
 
-  const confirm = document.createElement("button");
-  confirm.textContent = "Confirm changes";
+
+  const confirm =
+    document.createElement("button");
+
+  confirm.textContent =
+    "Confirm changes";
+
   confirm.style.width = "auto";
   confirm.style.padding = "8px 12px";
 
-  const cancel = document.createElement("button");
+
+  const cancel =
+    document.createElement("button");
+
   cancel.textContent = "Cancel";
   cancel.style.width = "auto";
   cancel.style.padding = "8px 12px";
   cancel.style.background = "#6b7280";
 
-  confirm.addEventListener("click", () => {
-    applyChanges(changes);
-    pendingChanges = null;
 
-    confirm.disabled = true;
-    cancel.disabled = true;
+  confirm.addEventListener(
+    "click",
+    () => {
 
-    addMessage(
-      "Learning plan updated.",
-      "assistant"
-    );
-  });
+      applyChanges(changes);
 
-  cancel.addEventListener("click", () => {
-    pendingChanges = null;
+      pendingChanges = null;
 
-    confirm.disabled = true;
-    cancel.disabled = true;
+      confirm.disabled = true;
+      cancel.disabled = true;
 
-    addMessage(
-      "No changes were made.",
-      "assistant"
-    );
-  });
+      addMessage(
+        "Learning plan updated.",
+        "assistant"
+      );
+
+    }
+  );
+
+
+  cancel.addEventListener(
+    "click",
+    () => {
+
+      pendingChanges = null;
+
+      confirm.disabled = true;
+      cancel.disabled = true;
+
+      addMessage(
+        "No changes were made.",
+        "assistant"
+      );
+
+    }
+  );
+
 
   actions.appendChild(confirm);
   actions.appendChild(cancel);
+
   wrapper.appendChild(actions);
 
   chat.appendChild(wrapper);
-  chat.scrollTop = chat.scrollHeight;
+
+  chat.scrollTop =
+    chat.scrollHeight;
 }
 
 
+
 function applyChanges(changes) {
+
   for (const change of changes) {
 
     if (change.action === "setComplete") {
 
-  const checkbox = document.querySelector(
-    `input[data-id="${change.id}"]`
-  );
+      const checkbox =
+        document.querySelector(
+          `input[data-id="${change.id}"]`
+        );
 
-  if (checkbox) {
 
-    checkbox.checked = !!change.value;
+      if (checkbox) {
 
-    localStorage.setItem(
-      "learning-" + change.id,
-      checkbox.checked
-    );
+        checkbox.checked =
+          !!change.value;
 
-  } else {
+        localStorage.setItem(
+          "learning-" + change.id,
+          checkbox.checked
+        );
 
-    localStorage.setItem(
-      "learning-" + change.id,
-      !!change.value
-    );
+      } else {
 
-  }
-}
+        localStorage.setItem(
+          "learning-" + change.id,
+          !!change.value
+        );
+
+      }
+
+    }
 
   }
 
@@ -776,32 +844,61 @@ function applyChanges(changes) {
 }
 
 
+
 async function sendMessage() {
-  const text = chatInput.value.trim();
+
+  const text =
+    chatInput.value.trim();
 
   if (!text) return;
 
-  addMessage(text, "user");
+
+  addMessage(
+    text,
+    "user"
+  );
+
+
   chatInput.value = "";
 
   sendButton.disabled = true;
-  sendButton.textContent = "Thinking...";
+  sendButton.textContent =
+    "Thinking...";
+
 
   try {
-    const response = await fetch(WORKER_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        message: text,
-        learningState: getLearningState()
-      })
-    });
 
-    const data = await response.json();
+    const response =
+      await fetch(
+        WORKER_URL,
+        {
+
+          method: "POST",
+
+          headers: {
+            "Content-Type":
+              "application/json"
+          },
+
+          body: JSON.stringify({
+
+            message: text,
+
+            learningState:
+              getLearningState()
+
+          })
+
+        }
+      );
+
+
+    const data =
+      await response.json();
+
 
     if (!response.ok) {
+
       console.error(data);
 
       addMessage(
@@ -812,21 +909,31 @@ async function sendMessage() {
       return;
     }
 
+
     if (data.type === "proposal") {
-      pendingChanges = data.changes || [];
+
+      pendingChanges =
+        data.changes || [];
 
       addProposal(
-        data.answer || "Proposed learning-plan update:",
+        data.answer ||
+          "Proposed learning-plan update:",
         pendingChanges
       );
+
     } else {
+
       addMessage(
-        data.answer || "No response received.",
+        data.answer ||
+          "No response received.",
         "assistant"
       );
+
     }
 
+
   } catch (error) {
+
     console.error(error);
 
     addMessage(
@@ -835,11 +942,17 @@ async function sendMessage() {
     );
 
   } finally {
+
     sendButton.disabled = false;
-    sendButton.textContent = "Send";
+
+    sendButton.textContent =
+      "Send";
+
     chatInput.focus();
+
   }
 }
+
 
 
 sendButton.addEventListener(
@@ -851,13 +964,18 @@ sendButton.addEventListener(
 chatInput.addEventListener(
   "keydown",
   event => {
+
     if (
       event.key === "Enter" &&
       !event.shiftKey
     ) {
+
       event.preventDefault();
+
       sendMessage();
+
     }
+
   }
 );
 
