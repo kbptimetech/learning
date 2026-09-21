@@ -320,26 +320,21 @@
 
     <h2 class="section-title">▶ Continue Learning</h2>
 
-    <section class="card current-card">
-      <span class="tag">CURRENT MODULE</span>
+<section class="card current-card" id="currentLearningCard">
 
-      <h3 style="margin-top:10px;">
-        Ziritaxestat — Why did it fail?
-      </h3>
+  <span class="tag" id="currentTag">CURRENT MODULE</span>
 
-      <p>
-        Understand why compelling autotaxin/LPA biology, clear target engagement
-        and promising early evidence failed to translate into Phase III efficacy.
-      </p>
+  <h3 id="currentTitle" style="margin-top:10px;"></h3>
 
-      <p>
-        <a
-          href="https://jamanetwork.com/journals/jama/fullarticle/2804605"
-          target="_blank">
-          Read the ISABELA Phase III paper →
-        </a>
-      </p>
-    </section>
+  <p id="currentDescription"></p>
+
+  <p>
+    <a id="currentLink" href="#" target="_blank">
+      Open learning resource →
+    </a>
+  </p>
+
+</section>
 
 
     <h2 class="section-title">📚 IPF Learning Plan</h2>
@@ -623,11 +618,127 @@ function updateProgress() {
 
 
 updateProgress();
-
+renderCurrentItem();
 
 
 const WORKER_URL =
   "https://learning-assistant.kbptimetech.workers.dev";
+
+const learningItems = [
+
+  {
+    id: "ziritaxestat",
+    title: "Ziritaxestat — Why did it fail?",
+    parentModule: "failures",
+    description:
+      "Understand why compelling autotaxin/LPA biology and clear target engagement failed to translate into Phase III efficacy.",
+    resourceUrl:
+      "https://jamanetwork.com/journals/jama/fullarticle/2804605"
+  },
+
+  {
+    id: "lpa-biology",
+    title: "Understand the LPA / Autotaxin / LPA1 pathway",
+    parentModule: "pathways",
+    description:
+      "Build the biological model connecting autotaxin, lysophosphatidic acid, LPA receptors, fibroblast activation and pulmonary fibrosis.",
+    resourceUrl:
+      "https://pmc.ncbi.nlm.nih.gov/articles/PMC12991008/"
+  },
+
+  {
+    id: "admilparant-comparison",
+    title: "Why might admilparant succeed where ziritaxestat failed?",
+    parentModule: "pipeline",
+    description:
+      "Compare upstream autotaxin inhibition with selective LPA1 receptor inhibition and develop your own investment thesis.",
+    resourceUrl:
+      "https://clinicaltrials.gov/study/NCT06003426"
+  },
+
+  {
+    id: "prm151",
+    title: "Failure #2 — Zinpentraxin alfa / PRM-151",
+    parentModule: "failures",
+    description:
+      "Study another case where encouraging Phase II evidence failed to reproduce in Phase III.",
+    resourceUrl:
+      "https://clinicaltrials.gov/"
+  }
+
+];
+
+function isItemComplete(id) {
+
+  return (
+    localStorage.getItem(
+      "learning-" + id
+    ) === "true"
+  );
+
+}
+
+
+function getCurrentItem() {
+
+  return learningItems.find(
+    item => !isItemComplete(item.id)
+  ) || null;
+
+}
+
+
+function renderCurrentItem() {
+
+  const item =
+    getCurrentItem();
+
+  const title =
+    document.getElementById("currentTitle");
+
+  const description =
+    document.getElementById("currentDescription");
+
+  const link =
+    document.getElementById("currentLink");
+
+  const tag =
+    document.getElementById("currentTag");
+
+
+  if (!item) {
+
+    tag.textContent =
+      "COMPLETE";
+
+    title.textContent =
+      "Current learning sequence completed";
+
+    description.textContent =
+      "You have completed all items in the current learning sequence.";
+
+    link.style.display =
+      "none";
+
+    return;
+  }
+
+
+  tag.textContent =
+    "CURRENT MODULE";
+
+  title.textContent =
+    item.title;
+
+  description.textContent =
+    item.description;
+
+  link.href =
+    item.resourceUrl;
+
+  link.style.display =
+    "inline";
+}
 
 const chatInput =
   document.getElementById("chatInput");
@@ -647,7 +758,9 @@ function getLearningState() {
   const modules = {};
 
   document
-    .querySelectorAll('input[type="checkbox"][data-id]')
+    .querySelectorAll(
+      'input[type="checkbox"][data-id]'
+    )
     .forEach(box => {
 
       modules[box.dataset.id] = {
@@ -657,19 +770,35 @@ function getLearningState() {
     });
 
 
+  const current =
+    getCurrentItem();
+
+
   return {
 
-    subject: "Idiopathic Pulmonary Fibrosis",
+    subject:
+      "Idiopathic Pulmonary Fibrosis",
 
-    currentItem: {
-      id: "ziritaxestat",
-      title: "Ziritaxestat — Why did it fail?",
-      parentModule: "failures",
-      complete:
-        localStorage.getItem(
-          "learning-ziritaxestat"
-        ) === "true"
-    },
+    currentItem:
+      current
+        ? {
+            id: current.id,
+            title: current.title,
+            parentModule:
+              current.parentModule,
+            complete: false
+          }
+        : null,
+
+    learningItems:
+      learningItems.map(item => ({
+        id: item.id,
+        title: item.title,
+        parentModule:
+          item.parentModule,
+        complete:
+          isItemComplete(item.id)
+      })),
 
     modules
   };
@@ -841,6 +970,7 @@ function applyChanges(changes) {
   }
 
   updateProgress();
+  renderCurrentItem();
 }
 
 
