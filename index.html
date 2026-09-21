@@ -154,26 +154,86 @@
       font-size: 17px;
     }
 
-    .learning-row {
+    .learning-item {
+      border-top: 1px solid #eef1f4;
+      padding: 14px 0;
+    }
+
+    .learning-item:first-of-type {
+      border-top: none;
+    }
+
+    .learning-header {
       display: flex;
-      gap: 12px;
-      padding: 12px 0;
-      border-bottom: 1px solid #f0f2f5;
       align-items: flex-start;
+      gap: 12px;
     }
 
-    .learning-row:last-child {
-      border-bottom: none;
-    }
-
-    .learning-row input[type="checkbox"] {
+    .learning-header input {
       margin-top: 4px;
       transform: scale(1.15);
     }
 
-    .learning-row.completed strong {
+    .learning-header strong {
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .learning-item.completed strong {
       text-decoration: line-through;
       color: #667085;
+    }
+
+    details {
+      margin-top: 10px;
+      margin-left: 28px;
+    }
+
+    summary {
+      cursor: pointer;
+      color: #245fd1;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .lesson-content {
+      margin-top: 12px;
+      line-height: 1.6;
+    }
+
+    .why-box {
+      margin-top: 12px;
+      padding: 12px;
+      background: #f5f8ff;
+      border-left: 4px solid #3157a5;
+      border-radius: 8px;
+    }
+
+    .resource-list {
+      margin-top: 12px;
+    }
+
+    .resource-item {
+      margin-top: 7px;
+      font-size: 14px;
+    }
+
+    .news-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .news-item {
+      padding: 14px;
+      border: 1px solid #eceff3;
+      border-radius: 10px;
+      background: #fff;
+    }
+
+    .news-meta {
+      color: #667085;
+      font-size: 12px;
+      margin-bottom: 6px;
     }
 
     .assistant {
@@ -293,11 +353,6 @@
       cursor: not-allowed;
     }
 
-    .status {
-      color: #667085;
-      font-size: 13px;
-    }
-
     @media (max-width: 950px) {
       .layout {
         grid-template-columns: 1fr;
@@ -350,28 +405,16 @@
     <section class="card news-card">
       <h3>Latest IPF intelligence</h3>
 
-      <p>
-        This will become the top-priority feed for:
-      </p>
-
-      <p class="small">
-        Clinical readouts · FDA decisions · pipeline changes · licensing deals ·
-        acquisitions · financings · important publications · podcasts · executive interviews
-      </p>
-
-      <p class="small">
-        Automatic monitoring is the next major feature after the learning-plan system is complete.
-      </p>
+      <div id="newsList" class="news-list">
+        <p class="small">No news loaded yet.</p>
+      </div>
     </section>
 
 
     <h2 class="section-title">▶ Continue Learning</h2>
 
-    <section class="card current-card" id="currentLearningCard">
-
-      <span class="tag" id="currentTag">
-        CURRENT MODULE
-      </span>
+    <section class="card current-card">
+      <span class="tag" id="currentTag">CURRENT MODULE</span>
 
       <h3 id="currentTitle" style="margin-top:10px;">
         Loading...
@@ -388,14 +431,13 @@
           Open learning resource →
         </a>
       </p>
-
     </section>
 
 
     <h2 class="section-title">📚 IPF Commercial & BD Learning Plan</h2>
 
     <section class="card" id="learningPlan">
-      <p class="status">Loading learning plan...</p>
+      <p class="small">Loading learning plan...</p>
     </section>
 
   </main>
@@ -406,7 +448,6 @@
     <section class="assistant">
 
       <div class="assistant-header">
-
         <h2>💬 Learning Assistant</h2>
 
         <p>
@@ -417,7 +458,6 @@
           Normal chat never changes your learning plan.
           Updates require an explicit request and your confirmation.
         </div>
-
       </div>
 
 
@@ -428,23 +468,19 @@
 
           <br><br>
 
-          I can help you learn IPF from a commercial, BD, clinical and investor perspective.
-
-          <br><br>
-
           Examples:
 
           <br><br>
 
           “Explain OFEV's commercial history.”
           <br>
-          “What makes an IPF Phase II result partnerable?”
+          “Add actual lesson content to the market-size module.”
           <br>
-          “Add a module on IPF licensing deals.”
+          “Add the JAMA ziritaxestat paper as a resource.”
           <br>
           “Move pricing before epidemiology.”
           <br>
-          “Mark the market-size module complete.”
+          “Mark market-size complete.”
         </div>
 
       </div>
@@ -474,10 +510,9 @@
 const WORKER_URL =
   "https://learning-assistant.kbptimetech.workers.dev";
 
-
 let currentPlan = null;
+let currentNews = [];
 let pendingChanges = null;
-
 
 const chatInput =
   document.getElementById("chatInput");
@@ -489,18 +524,21 @@ const chat =
   document.getElementById("chat");
 
 
+async function loadAll() {
+  await Promise.all([
+    loadPlan(),
+    loadNews()
+  ]);
+}
+
 
 async function loadPlan() {
-
   try {
-
     const response = await fetch(
       WORKER_URL + "/plan"
     );
 
-    const data =
-      await response.json();
-
+    const data = await response.json();
 
     if (!response.ok) {
       throw new Error(
@@ -508,73 +546,75 @@ async function loadPlan() {
       );
     }
 
-
-    currentPlan =
-      data.plan;
-
+    currentPlan = data.plan;
 
     renderPlan();
 
   } catch (error) {
-
     console.error(error);
 
     document.getElementById(
       "learningPlan"
     ).innerHTML =
       "<p>Unable to load the learning plan.</p>";
-
   }
 }
 
 
+async function loadNews() {
+  try {
+    const response = await fetch(
+      WORKER_URL + "/news"
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(
+        data.error || "Unable to load news"
+      );
+    }
+
+    currentNews =
+      data.news || [];
+
+    renderNews();
+
+  } catch (error) {
+    console.error(error);
+
+    document.getElementById(
+      "newsList"
+    ).innerHTML =
+      "<p class='small'>Unable to load news.</p>";
+  }
+}
+
 
 function getAllItems() {
-
   if (!currentPlan) {
     return [];
   }
 
-
   const items = [];
 
-
-  for (
-    const section
-    of currentPlan.sections || []
-  ) {
-
-    for (
-      const item
-      of section.items || []
-    ) {
-
+  for (const section of currentPlan.sections || []) {
+    for (const item of section.items || []) {
       items.push({
         ...item,
-        sectionKey:
-          section.sectionKey,
-        sectionTitle:
-          section.title
+        sectionKey: section.sectionKey,
+        sectionTitle: section.title
       });
-
     }
-
   }
-
 
   return items;
 }
 
 
-
 function getCurrentItem() {
-
-  const items =
-    getAllItems();
-
-
   return (
-    items.find(
+    getAllItems().find(
       item => !item.completed
     )
     || null
@@ -582,52 +622,35 @@ function getCurrentItem() {
 }
 
 
-
 function renderPlan() {
-
   renderSubject();
-
   renderProgress();
-
   renderCurrentItem();
-
   renderLearningPlan();
-
 }
 
 
-
 function renderSubject() {
-
   if (!currentPlan) {
     return;
   }
 
-
   document.getElementById(
     "subjectTitle"
   ).textContent =
-    currentPlan.subject
-    || "Learning Plan";
+    currentPlan.subject || "Learning Plan";
 }
 
 
-
 function renderProgress() {
+  const items = getAllItems();
 
-  const items =
-    getAllItems();
-
-
-  const total =
-    items.length;
-
+  const total = items.length;
 
   const completed =
     items.filter(
       item => item.completed
     ).length;
-
 
   const percentage =
     total === 0
@@ -636,12 +659,10 @@ function renderProgress() {
           (completed / total) * 100
         );
 
-
   document.getElementById(
     "progressBar"
   ).style.width =
     percentage + "%";
-
 
   document.getElementById(
     "progressText"
@@ -655,36 +676,22 @@ function renderProgress() {
 }
 
 
-
 function renderCurrentItem() {
-
-  const item =
-    getCurrentItem();
-
+  const item = getCurrentItem();
 
   const tag =
-    document.getElementById(
-      "currentTag"
-    );
+    document.getElementById("currentTag");
 
   const title =
-    document.getElementById(
-      "currentTitle"
-    );
+    document.getElementById("currentTitle");
 
   const description =
-    document.getElementById(
-      "currentDescription"
-    );
+    document.getElementById("currentDescription");
 
   const link =
-    document.getElementById(
-      "currentLink"
-    );
-
+    document.getElementById("currentLink");
 
   if (!item) {
-
     tag.textContent =
       "COMPLETE";
 
@@ -698,74 +705,61 @@ function renderCurrentItem() {
       "none";
 
     return;
-
   }
-
 
   tag.textContent =
     item.sectionTitle
       ? item.sectionTitle.toUpperCase()
       : "CURRENT MODULE";
 
-
   title.textContent =
     item.title;
-
 
   description.textContent =
     item.description || "";
 
+  const firstResource =
+    item.resources && item.resources.length
+      ? item.resources[0]
+      : null;
 
-  if (item.resourceUrl) {
-
+  if (firstResource) {
     link.href =
-      item.resourceUrl;
+      firstResource.url;
+
+    link.textContent =
+      "Open first learning resource →";
 
     link.style.display =
       "inline";
-
   } else {
-
     link.style.display =
       "none";
-
   }
 }
 
 
-
 function renderLearningPlan() {
-
   const container =
     document.getElementById(
       "learningPlan"
     );
 
-
   container.innerHTML = "";
 
-
   if (!currentPlan) {
-
     container.innerHTML =
       "<p>Loading learning plan...</p>";
 
     return;
-
   }
 
-
-  for (
-    const section
-    of currentPlan.sections || []
-  ) {
-
+  for (const section of currentPlan.sections || []) {
     const sectionWrapper =
       document.createElement("div");
 
     sectionWrapper.className =
       "plan-section";
-
 
     const heading =
       document.createElement("h3");
@@ -773,17 +767,11 @@ function renderLearningPlan() {
     heading.textContent =
       section.title;
 
-
     sectionWrapper.appendChild(
       heading
     );
 
-
-    if (
-      !section.items
-      || section.items.length === 0
-    ) {
-
+    if (!section.items || section.items.length === 0) {
       const empty =
         document.createElement("p");
 
@@ -796,148 +784,311 @@ function renderLearningPlan() {
       sectionWrapper.appendChild(
         empty
       );
-
     }
 
+    for (const item of section.items || []) {
+      sectionWrapper.appendChild(
+        createLearningItem(item)
+      );
+    }
 
-    for (
-      const item
-      of section.items || []
-    ) {
-
-      const row =
-        document.createElement("div");
-
-      row.className =
-        "learning-row"
-        + (
-          item.completed
-            ? " completed"
-            : ""
-        );
+    container.appendChild(
+      sectionWrapper
+    );
+  }
+}
 
 
-      const checkbox =
-        document.createElement("input");
+function createLearningItem(item) {
+  const wrapper =
+    document.createElement("div");
 
-      checkbox.type =
-        "checkbox";
+  wrapper.className =
+    "learning-item"
+    + (
+      item.completed
+        ? " completed"
+        : ""
+    );
 
+  const header =
+    document.createElement("div");
+
+  header.className =
+    "learning-header";
+
+  const checkbox =
+    document.createElement("input");
+
+  checkbox.type =
+    "checkbox";
+
+  checkbox.checked =
+    !!item.completed;
+
+  checkbox.addEventListener(
+    "change",
+    () => {
       checkbox.checked =
         !!item.completed;
 
-
-      checkbox.addEventListener(
-        "change",
-        () => {
-
-          checkbox.checked =
-            !!item.completed;
-
-          addMessage(
-            `To change "${item.title}", ask me explicitly to update the learning plan.`,
-            "assistant"
-          );
-
-        }
+      addMessage(
+        `To change "${item.title}", ask me explicitly to update the learning plan.`,
+        "assistant"
       );
+    }
+  );
 
+  const main =
+    document.createElement("div");
 
-      const text =
+  const strong =
+    document.createElement("strong");
+
+  strong.textContent =
+    item.title;
+
+  const description =
+    document.createElement("div");
+
+  description.className =
+    "small";
+
+  description.textContent =
+    item.description || "";
+
+  main.appendChild(strong);
+  main.appendChild(description);
+
+  header.appendChild(checkbox);
+  header.appendChild(main);
+
+  wrapper.appendChild(header);
+
+  const hasDetails =
+    item.content
+    || item.whyItMatters
+    || (
+      item.resources
+      && item.resources.length
+    );
+
+  if (hasDetails) {
+    const details =
+      document.createElement("details");
+
+    const summary =
+      document.createElement("summary");
+
+    summary.textContent =
+      "View lesson & resources";
+
+    details.appendChild(summary);
+
+    if (item.content) {
+      const content =
         document.createElement("div");
 
+      content.className =
+        "lesson-content";
 
-      const strong =
+      content.textContent =
+        item.content;
+
+      details.appendChild(content);
+    }
+
+    if (item.whyItMatters) {
+      const why =
+        document.createElement("div");
+
+      why.className =
+        "why-box";
+
+      const label =
         document.createElement("strong");
 
-      strong.textContent =
-        item.title;
+      label.textContent =
+        "Why it matters";
 
-
-      const small =
+      const body =
         document.createElement("div");
 
-      small.className =
-        "small";
+      body.style.marginTop =
+        "5px";
 
-      small.textContent =
-        item.description || "";
+      body.textContent =
+        item.whyItMatters;
 
+      why.appendChild(label);
+      why.appendChild(body);
 
-      text.appendChild(
-        strong
-      );
+      details.appendChild(why);
+    }
 
-      text.appendChild(
-        small
-      );
+    if (
+      item.resources
+      && item.resources.length
+    ) {
+      const resourceList =
+        document.createElement("div");
 
+      resourceList.className =
+        "resource-list";
 
-      if (item.resourceUrl) {
+      const label =
+        document.createElement("strong");
 
-        const resource =
+      label.textContent =
+        "Resources";
+
+      resourceList.appendChild(label);
+
+      for (const resource of item.resources) {
+        const row =
           document.createElement("div");
 
-        resource.style.marginTop =
-          "5px";
-
+        row.className =
+          "resource-item";
 
         const anchor =
           document.createElement("a");
 
         anchor.href =
-          item.resourceUrl;
+          resource.url;
 
         anchor.target =
           "_blank";
 
         anchor.textContent =
-          "Open resource →";
+          resource.title;
 
+        row.appendChild(anchor);
 
-        resource.appendChild(
-          anchor
-        );
+        if (
+          resource.sourceName
+          || resource.resourceType
+        ) {
+          const meta =
+            document.createElement("span");
 
-        text.appendChild(
-          resource
-        );
+          meta.className =
+            "small";
 
+          meta.textContent =
+            " — "
+            + [
+                resource.sourceName,
+                resource.resourceType
+              ]
+              .filter(Boolean)
+              .join(" · ");
+
+          row.appendChild(meta);
+        }
+
+        resourceList.appendChild(row);
       }
 
-
-      row.appendChild(
-        checkbox
-      );
-
-      row.appendChild(
-        text
-      );
-
-      sectionWrapper.appendChild(
-        row
-      );
-
+      details.appendChild(resourceList);
     }
 
+    wrapper.appendChild(details);
+  }
 
-    container.appendChild(
-      sectionWrapper
+  return wrapper;
+}
+
+
+function renderNews() {
+  const container =
+    document.getElementById(
+      "newsList"
     );
 
+  container.innerHTML = "";
+
+  if (!currentNews.length) {
+    container.innerHTML =
+      "<p class='small'>No news items yet. Automated news collection is the next step.</p>";
+
+    return;
+  }
+
+  for (const item of currentNews) {
+    const card =
+      document.createElement("div");
+
+    card.className =
+      "news-item";
+
+    const meta =
+      document.createElement("div");
+
+    meta.className =
+      "news-meta";
+
+    meta.textContent =
+      [
+        item.category,
+        item.sourceName,
+        item.publishedDate
+      ]
+      .filter(Boolean)
+      .join(" · ");
+
+    const title =
+      document.createElement("strong");
+
+    title.textContent =
+      item.headline;
+
+    const summary =
+      document.createElement("p");
+
+    summary.textContent =
+      item.summary || "";
+
+    card.appendChild(meta);
+    card.appendChild(title);
+    card.appendChild(summary);
+
+    if (item.whyItMatters) {
+      const why =
+        document.createElement("p");
+
+      why.className =
+        "small";
+
+      why.textContent =
+        "Why it matters: "
+        + item.whyItMatters;
+
+      card.appendChild(why);
+    }
+
+    const link =
+      document.createElement("a");
+
+    link.href =
+      item.url;
+
+    link.target =
+      "_blank";
+
+    link.textContent =
+      "Read source →";
+
+    card.appendChild(link);
+
+    container.appendChild(card);
   }
 }
 
 
-
-function addMessage(
-  text,
-  type
-) {
-
+function addMessage(text, type) {
   const message =
     document.createElement("div");
-
 
   message.className =
     "message "
@@ -947,164 +1098,111 @@ function addMessage(
         : "assistant-message"
     );
 
-
   message.textContent =
     text;
 
-
-  chat.appendChild(
-    message
-  );
-
+  chat.appendChild(message);
 
   chat.scrollTop =
     chat.scrollHeight;
 }
 
 
-
-function addProposal(
-  answer,
-  changes
-) {
-
+function addProposal(answer, changes) {
   const wrapper =
     document.createElement("div");
-
 
   wrapper.className =
     "message assistant-message";
 
-
   const text =
     document.createElement("div");
-
 
   text.textContent =
     answer
     || "Proposed learning-plan change:";
 
-
-  wrapper.appendChild(
-    text
-  );
-
+  wrapper.appendChild(text);
 
   const actions =
     document.createElement("div");
 
-
   actions.className =
     "proposal-actions";
-
 
   const confirm =
     document.createElement("button");
 
-
   confirm.className =
     "inline-button";
-
 
   confirm.textContent =
     "Confirm changes";
 
-
   const cancel =
     document.createElement("button");
-
 
   cancel.className =
     "inline-button secondary";
 
-
   cancel.textContent =
     "Cancel";
-
 
   confirm.addEventListener(
     "click",
     async () => {
-
       confirm.disabled =
         true;
 
       cancel.disabled =
         true;
-
 
       await applyChanges(
         changes
       );
 
-
       pendingChanges =
         null;
-
     }
   );
-
 
   cancel.addEventListener(
     "click",
     () => {
-
       confirm.disabled =
         true;
 
       cancel.disabled =
         true;
 
-
       pendingChanges =
         null;
-
 
       addMessage(
         "No changes were made.",
         "assistant"
       );
-
     }
   );
 
+  actions.appendChild(confirm);
+  actions.appendChild(cancel);
 
-  actions.appendChild(
-    confirm
-  );
+  wrapper.appendChild(actions);
 
-  actions.appendChild(
-    cancel
-  );
-
-
-  wrapper.appendChild(
-    actions
-  );
-
-
-  chat.appendChild(
-    wrapper
-  );
-
+  chat.appendChild(wrapper);
 
   chat.scrollTop =
     chat.scrollHeight;
 }
 
 
-
-async function applyChanges(
-  changes
-) {
-
+async function applyChanges(changes) {
   try {
-
     const response =
       await fetch(
         WORKER_URL + "/apply",
         {
-
           method: "POST",
 
           headers: {
@@ -1115,17 +1213,13 @@ async function applyChanges(
           body: JSON.stringify({
             changes
           })
-
         }
       );
-
 
     const data =
       await response.json();
 
-
     if (!response.ok) {
-
       console.error(data);
 
       addMessage(
@@ -1134,16 +1228,12 @@ async function applyChanges(
       );
 
       return;
-
     }
-
 
     currentPlan =
       data.plan;
 
-
     renderPlan();
-
 
     addMessage(
       "Learning plan updated.",
@@ -1151,56 +1241,43 @@ async function applyChanges(
     );
 
   } catch (error) {
-
     console.error(error);
-
 
     addMessage(
       "I couldn't apply the learning-plan changes.",
       "assistant"
     );
-
   }
 }
 
 
-
 async function sendMessage() {
-
   const text =
     chatInput.value.trim();
-
 
   if (!text) {
     return;
   }
-
 
   addMessage(
     text,
     "user"
   );
 
-
   chatInput.value =
     "";
-
 
   sendButton.disabled =
     true;
 
-
   sendButton.textContent =
     "Thinking...";
 
-
   try {
-
     const response =
       await fetch(
         WORKER_URL + "/chat",
         {
-
           method: "POST",
 
           headers: {
@@ -1211,19 +1288,14 @@ async function sendMessage() {
           body: JSON.stringify({
             message: text
           })
-
         }
       );
-
 
     const data =
       await response.json();
 
-
     if (!response.ok) {
-
       console.error(data);
-
 
       addMessage(
         "Something went wrong connecting to the Learning Assistant.",
@@ -1231,37 +1303,26 @@ async function sendMessage() {
       );
 
       return;
-
     }
 
-
-    if (
-      data.type === "proposal"
-    ) {
-
+    if (data.type === "proposal") {
       pendingChanges =
         data.changes || [];
-
 
       addProposal(
         data.answer,
         pendingChanges
       );
-
     } else {
-
       addMessage(
         data.answer
         || "No response received.",
         "assistant"
       );
-
     }
 
   } catch (error) {
-
     console.error(error);
-
 
     addMessage(
       "I couldn't reach the Learning Assistant.",
@@ -1269,20 +1330,15 @@ async function sendMessage() {
     );
 
   } finally {
-
     sendButton.disabled =
       false;
-
 
     sendButton.textContent =
       "Send";
 
-
     chatInput.focus();
-
   }
 }
-
 
 
 sendButton.addEventListener(
@@ -1291,28 +1347,21 @@ sendButton.addEventListener(
 );
 
 
-
 chatInput.addEventListener(
   "keydown",
   event => {
-
     if (
       event.key === "Enter"
       && !event.shiftKey
     ) {
-
       event.preventDefault();
-
       sendMessage();
-
     }
-
   }
 );
 
 
-
-loadPlan();
+loadAll();
 
 </script>
 
