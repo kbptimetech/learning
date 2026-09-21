@@ -645,11 +645,19 @@ function getLearningState() {
       };
     });
 
-  return {
-    subject: "Idiopathic Pulmonary Fibrosis",
-    currentModule: "Ziritaxestat — Why did it fail?",
-    modules
-  };
+return {
+  subject: "Idiopathic Pulmonary Fibrosis",
+
+  currentItem: {
+    id: "ziritaxestat",
+    title: "Ziritaxestat — Why did it fail?",
+    parentModule: "failures",
+    complete:
+      localStorage.getItem("learning-ziritaxestat") === "true"
+  },
+
+  modules
+};
 }
 
 
@@ -738,19 +746,29 @@ function applyChanges(changes) {
   for (const change of changes) {
 
     if (change.action === "setComplete") {
-      const checkbox = document.querySelector(
-        `input[data-id="${change.id}"]`
-      );
 
-      if (checkbox) {
-        checkbox.checked = !!change.value;
+  const checkbox = document.querySelector(
+    `input[data-id="${change.id}"]`
+  );
 
-        localStorage.setItem(
-          "learning-" + change.id,
-          checkbox.checked
-        );
-      }
-    }
+  if (checkbox) {
+
+    checkbox.checked = !!change.value;
+
+    localStorage.setItem(
+      "learning-" + change.id,
+      checkbox.checked
+    );
+
+  } else {
+
+    localStorage.setItem(
+      "learning-" + change.id,
+      !!change.value
+    );
+
+  }
+}
 
   }
 
