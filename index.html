@@ -798,6 +798,111 @@ function renderLearningPlan() {
   }
 }
 
+  function escapeHtml(text) {
+  return String(text || "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+
+function renderSimpleMarkdown(text) {
+  const lines = escapeHtml(text)
+    .split(/\r?\n/);
+
+  let html = "";
+  let inList = false;
+
+  function formatInline(line) {
+    return line
+      .replace(
+        /\*\*(.+?)\*\*/g,
+        "<strong>$1</strong>"
+      )
+      .replace(
+        /\*(.+?)\*/g,
+        "<em>$1</em>"
+      );
+  }
+
+  for (const rawLine of lines) {
+    const line = rawLine.trim();
+
+    if (!line) {
+      if (inList) {
+        html += "</ul>";
+        inList = false;
+      }
+
+      html += "<br>";
+      continue;
+    }
+
+    if (line.startsWith("### ")) {
+      if (inList) {
+        html += "</ul>";
+        inList = false;
+      }
+
+      html +=
+        "<h4>"
+        + formatInline(line.slice(4))
+        + "</h4>";
+
+      continue;
+    }
+
+    if (line.startsWith("## ")) {
+      if (inList) {
+        html += "</ul>";
+        inList = false;
+      }
+
+      html +=
+        "<h3>"
+        + formatInline(line.slice(3))
+        + "</h3>";
+
+      continue;
+    }
+
+    if (
+      line.startsWith("- ")
+      || line.startsWith("* ")
+    ) {
+      if (!inList) {
+        html += "<ul>";
+        inList = true;
+      }
+
+      html +=
+        "<li>"
+        + formatInline(line.slice(2))
+        + "</li>";
+
+      continue;
+    }
+
+    if (inList) {
+      html += "</ul>";
+      inList = false;
+    }
+
+    html +=
+      "<p>"
+      + formatInline(line)
+      + "</p>";
+  }
+
+  if (inList) {
+    html += "</ul>";
+  }
+
+  return html;
+}
+
 
 function createLearningItem(item) {
   const wrapper =
@@ -892,8 +997,10 @@ function createLearningItem(item) {
       content.className =
         "lesson-content";
 
-      content.textContent =
-        item.content;
+      content.innerHTML =
+        renderSimpleMarkdown(
+          item.content
+          );
 
       details.appendChild(content);
     }
@@ -917,8 +1024,10 @@ function createLearningItem(item) {
       body.style.marginTop =
         "5px";
 
-      body.textContent =
-        item.whyItMatters;
+      body.innerHTML =
+        renderSimpleMarkdown(
+        item.whyItMatters
+          );
 
       why.appendChild(label);
       why.appendChild(body);
