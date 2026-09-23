@@ -1,821 +1,1010 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <title>My Learning Hub</title>
+<meta charset="UTF-8">
 
-  <style>
-    * {
-      box-sizing: border-box;
-    }
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+>
 
-    body {
-      margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
-      background: #f5f7fa;
-      color: #182230;
-    }
+<title>IPF Learning Hub</title>
 
-    header {
-      background: #ffffff;
-      border-bottom: 1px solid #e5e7eb;
-      padding: 20px 32px;
-      position: sticky;
-      top: 0;
-      z-index: 10;
-    }
+<style>
 
-    header h1 {
-      margin: 0;
-      font-size: 24px;
-    }
+* {
+  box-sizing: border-box;
+}
 
-    header p {
-      margin: 4px 0 0;
-      color: #667085;
-      font-size: 14px;
-    }
+body {
+  margin: 0;
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Arial,
+    sans-serif;
 
-    .layout {
-      max-width: 1450px;
-      margin: 0 auto;
-      padding: 28px;
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) 390px;
-      gap: 24px;
-    }
+  background: #f6f7f9;
+  color: #182230;
+}
 
-    .main-column,
-    .assistant-column {
-      min-width: 0;
-    }
+header {
+  background: white;
+  border-bottom: 1px solid #e5e7eb;
+  padding: 20px 28px;
+}
 
-    .hero {
-      background: linear-gradient(135deg, #16324f, #245c76);
-      color: white;
-      border-radius: 16px;
-      padding: 28px;
-      margin-bottom: 24px;
-    }
+header h1 {
+  margin: 0;
+  font-size: 24px;
+}
 
-    .hero h2 {
-      margin: 6px 0 8px;
-      font-size: 30px;
-    }
+header p {
+  margin: 5px 0 0;
+  color: #667085;
+  font-size: 14px;
+}
 
-    .hero p {
-      color: #e8f0f5;
-      max-width: 780px;
-      line-height: 1.55;
-    }
+.layout {
+  max-width: 1450px;
+  margin: auto;
+  padding: 24px;
 
-    .tag {
-      display: inline-block;
-      padding: 5px 9px;
-      border-radius: 999px;
-      font-size: 11px;
-      font-weight: 700;
-      background: #e8eefc;
-      color: #3157a5;
-    }
+  display: grid;
+  grid-template-columns:
+    minmax(0, 1fr)
+    390px;
 
-    .hero .tag {
-      background: rgba(255,255,255,0.15);
-      color: white;
-    }
+  gap: 24px;
+}
 
-    .section-title {
-      font-size: 19px;
-      margin: 26px 0 12px;
-    }
+.main-column {
+  min-width: 0;
+}
 
-    .card {
-      background: #ffffff;
-      border: 1px solid #e5e7eb;
-      border-radius: 12px;
-      padding: 18px;
-      margin-bottom: 12px;
-    }
+.assistant-column {
+  min-width: 0;
+}
 
-    .news-card {
-      border-left: 5px solid #d92d20;
-    }
+.card {
+  background: white;
+  border: 1px solid #e3e7ed;
+  border-radius: 12px;
+  padding: 18px;
+  margin-bottom: 14px;
+}
 
-    .current-card {
-      border-left: 5px solid #2e67d1;
-    }
+.hero {
+  background:
+    linear-gradient(
+      135deg,
+      #173550,
+      #245f78
+    );
 
-    .card h3 {
-      margin: 0 0 8px;
-    }
+  color: white;
 
-    .small {
-      color: #667085;
-      font-size: 13px;
-      line-height: 1.45;
-    }
+  border-radius: 16px;
+  padding: 26px;
+  margin-bottom: 24px;
+}
 
-    a {
-      color: #245fd1;
-      text-decoration: none;
-    }
+.hero-label {
+  font-size: 11px;
+  font-weight: 700;
+  opacity: 0.8;
+}
 
-    a:hover {
-      text-decoration: underline;
-    }
+.hero h2 {
+  margin:
+    7px 0 8px;
 
-    .progress-shell {
-      height: 9px;
-      background: rgba(255,255,255,0.20);
-      border-radius: 10px;
-      margin-top: 18px;
-      overflow: hidden;
-    }
+  font-size: 29px;
+}
 
-    .progress-bar {
-      height: 100%;
-      width: 0%;
-      background: white;
-      transition: width 0.25s ease;
-    }
+.hero p {
+  color: #eaf0f5;
+  line-height: 1.55;
+}
 
-    .plan-section {
-      margin-bottom: 28px;
-    }
+.missions {
+  display: grid;
 
-    .plan-section:last-child {
-      margin-bottom: 0;
-    }
+  grid-template-columns:
+    repeat(
+      2,
+      minmax(0, 1fr)
+    );
 
-    .plan-section h3 {
-      margin-bottom: 12px;
-      font-size: 17px;
-    }
+  gap: 14px;
+}
 
-    .learning-item {
-      border-top: 1px solid #eef1f4;
-      padding: 14px 0;
-    }
+.mission-card {
+  background: white;
+  border:
+    1px solid #e3e7ed;
 
-    .learning-item:first-of-type {
-      border-top: none;
-    }
+  border-radius: 12px;
 
-    .learning-header {
-      display: flex;
-      align-items: flex-start;
-      gap: 12px;
-    }
+  padding: 20px;
+}
 
-    .learning-header input {
-      margin-top: 4px;
-      transform: scale(1.15);
-    }
+.mission-number {
+  color: #667085;
+  font-size: 12px;
+  font-weight: 700;
+}
 
-    .learning-header strong {
-      display: block;
-      margin-bottom: 4px;
-    }
+.mission-card h3 {
+  margin:
+    7px 0 8px;
+}
 
-    .learning-item.completed strong {
-      text-decoration: line-through;
-      color: #667085;
-    }
+.mission-card p {
+  margin:
+    0 0 14px;
 
-    details {
-      margin-top: 10px;
-      margin-left: 28px;
-    }
+  line-height:
+    1.5;
+}
 
-    summary {
-      cursor: pointer;
-      color: #245fd1;
-      font-size: 13px;
-      font-weight: 600;
-    }
+.mission-flow {
+  color: #667085;
+  font-size: 13px;
+  line-height: 1.5;
+}
 
-    .lesson-content {
-      margin-top: 12px;
-      line-height: 1.6;
-    }
+.section-title {
+  font-size: 20px;
 
-    .why-box {
-      margin-top: 12px;
-      padding: 12px;
-      background: #f5f8ff;
-      border-left: 4px solid #3157a5;
-      border-radius: 8px;
-    }
+  margin:
+    28px 0 12px;
+}
 
-    .resource-list {
-      margin-top: 12px;
-    }
+.news-card {
+  border-left:
+    5px solid #d92d20;
+}
 
-    .resource-item {
-      margin-top: 7px;
-      font-size: 14px;
-    }
+.current-card {
+  border-left:
+    5px solid #2e67d1;
+}
 
-    .news-list {
-      display: grid;
-      gap: 12px;
-    }
+.tag {
+  display:
+    inline-block;
 
-    .news-item {
-      padding: 14px;
-      border: 1px solid #eceff3;
-      border-radius: 10px;
-      background: #fff;
-    }
+  padding:
+    5px 9px;
 
-    .news-meta {
-      color: #667085;
-      font-size: 12px;
-      margin-bottom: 6px;
-    }
+  border-radius:
+    999px;
 
-    .assistant {
-      background: #ffffff;
-      border: 1px solid #dfe3e8;
-      border-radius: 16px;
-      overflow: hidden;
-      position: sticky;
-      top: 96px;
-      height: calc(100vh - 125px);
-      min-height: 580px;
-      display: flex;
-      flex-direction: column;
-    }
+  background:
+    #eef3ff;
 
-    .assistant-header {
-      padding: 18px;
-      border-bottom: 1px solid #e5e7eb;
-    }
+  color:
+    #3157a5;
 
-    .assistant-header h2 {
-      margin: 0;
-      font-size: 18px;
-    }
+  font-size:
+    11px;
 
-    .assistant-header p {
-      margin: 5px 0 0;
-      color: #667085;
-      font-size: 12px;
-    }
+  font-weight:
+    700;
+}
 
-    .policy-box {
-      background: #f1f6ff;
-      border: 1px solid #d8e5ff;
-      color: #35517c;
-      font-size: 12px;
-      padding: 10px 12px;
-      border-radius: 9px;
-      margin-top: 10px;
-    }
+.small {
+  color: #667085;
+  font-size: 13px;
+  line-height: 1.45;
+}
 
-    .chat {
-      flex: 1;
-      overflow-y: auto;
-      padding: 16px;
-      background: #fafbfc;
-    }
+a {
+  color: #245fd1;
+  text-decoration: none;
+}
 
-    .message {
-      padding: 11px 13px;
-      border-radius: 12px;
-      margin-bottom: 12px;
-      line-height: 1.45;
-      font-size: 14px;
-      white-space: pre-wrap;
-    }
+a:hover {
+  text-decoration: underline;
+}
 
-    .assistant-message {
-      background: white;
-      border: 1px solid #e5e7eb;
-    }
+.progress-shell {
+  height: 9px;
 
-    .user-message {
-      background: #245fd1;
-      color: white;
-      margin-left: 35px;
-    }
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      0.20
+    );
 
-    .proposal-actions {
-      margin-top: 12px;
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
+  border-radius: 10px;
 
-    .composer {
-      border-top: 1px solid #e5e7eb;
-      padding: 14px;
-      background: white;
-    }
+  overflow: hidden;
 
-    textarea {
-      width: 100%;
-      resize: vertical;
-      min-height: 80px;
-      max-height: 180px;
-      border: 1px solid #cfd5dd;
-      border-radius: 10px;
-      padding: 11px;
-      font: inherit;
-    }
+  margin-top: 17px;
+}
 
-    button {
-      margin-top: 9px;
-      width: 100%;
-      border: none;
-      background: #245fd1;
-      color: white;
-      padding: 11px;
-      border-radius: 9px;
-      font-weight: 700;
-      cursor: pointer;
-    }
+.progress-bar {
+  height: 100%;
 
-    button.secondary {
-      background: #6b7280;
-    }
+  width: 0%;
 
-    button.inline-button {
-      width: auto;
-      padding: 8px 12px;
-      margin-top: 0;
-    }
+  background: white;
 
-    button:disabled {
-      opacity: 0.55;
-      cursor: not-allowed;
-    }
+  transition:
+    width 0.25s ease;
+}
 
-    @media (max-width: 950px) {
-      .layout {
-        grid-template-columns: 1fr;
-      }
+.plan-section {
+  margin-bottom: 27px;
+}
 
-      .assistant {
-        position: relative;
-        top: 0;
-        height: 600px;
-      }
-    }
-  </style>
+.plan-section:last-child {
+  margin-bottom: 0;
+}
+
+.plan-section h3 {
+  margin:
+    0 0 12px;
+
+  font-size:
+    17px;
+}
+
+.learning-item {
+  border-top:
+    1px solid #eef1f4;
+
+  padding:
+    14px 0;
+}
+
+.learning-item:first-of-type {
+  border-top: none;
+}
+
+.learning-header {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.learning-header input {
+  margin-top: 4px;
+  transform: scale(1.15);
+}
+
+.learning-header strong {
+  display: block;
+  margin-bottom: 4px;
+}
+
+.learning-item.completed strong {
+  text-decoration: line-through;
+  color: #667085;
+}
+
+details {
+  margin:
+    10px 0 0 28px;
+}
+
+summary {
+  cursor: pointer;
+
+  color:
+    #245fd1;
+
+  font-size:
+    13px;
+
+  font-weight:
+    600;
+}
+
+.lesson-content {
+  margin-top: 13px;
+  line-height: 1.65;
+}
+
+.lesson-content h3 {
+  margin-top: 20px;
+}
+
+.lesson-content h4 {
+  margin-top: 17px;
+}
+
+.lesson-content p {
+  margin:
+    9px 0;
+}
+
+.lesson-content ul {
+  padding-left: 23px;
+}
+
+.why-box {
+  margin-top: 13px;
+
+  padding: 12px;
+
+  background:
+    #f5f8ff;
+
+  border-left:
+    4px solid #3157a5;
+
+  border-radius: 8px;
+}
+
+.resource-list {
+  margin-top: 14px;
+}
+
+.resource-item {
+  margin-top: 7px;
+  font-size: 14px;
+}
+
+.news-list {
+  display: grid;
+  gap: 11px;
+}
+
+.news-item {
+  border:
+    1px solid #eceff3;
+
+  border-radius:
+    10px;
+
+  padding:
+    14px;
+}
+
+.news-meta {
+  color: #667085;
+  font-size: 12px;
+  margin-bottom: 6px;
+}
+
+.assistant {
+  background: white;
+
+  border:
+    1px solid #dfe3e8;
+
+  border-radius:
+    16px;
+
+  overflow: hidden;
+
+  position: sticky;
+  top: 20px;
+
+  height:
+    calc(100vh - 40px);
+
+  min-height:
+    580px;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.assistant-header {
+  padding: 18px;
+
+  border-bottom:
+    1px solid #e5e7eb;
+}
+
+.assistant-header h2 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.assistant-header p {
+  margin:
+    5px 0 0;
+
+  color:
+    #667085;
+
+  font-size:
+    12px;
+}
+
+.policy-box {
+  margin-top: 10px;
+
+  padding:
+    10px 12px;
+
+  background:
+    #f1f6ff;
+
+  border:
+    1px solid #d8e5ff;
+
+  border-radius:
+    9px;
+
+  color:
+    #35517c;
+
+  font-size:
+    12px;
+}
+
+.chat {
+  flex: 1;
+
+  overflow-y: auto;
+
+  padding: 16px;
+
+  background:
+    #fafbfc;
+}
+
+.message {
+  padding:
+    11px 13px;
+
+  border-radius:
+    12px;
+
+  margin-bottom:
+    12px;
+
+  line-height:
+    1.45;
+
+  font-size:
+    14px;
+
+  white-space:
+    pre-wrap;
+}
+
+.assistant-message {
+  background: white;
+
+  border:
+    1px solid #e5e7eb;
+}
+
+.user-message {
+  background:
+    #245fd1;
+
+  color: white;
+
+  margin-left:
+    35px;
+}
+
+.proposal-actions {
+  margin-top:
+    12px;
+
+  display: flex;
+
+  gap:
+    8px;
+
+  flex-wrap:
+    wrap;
+}
+
+.composer {
+  padding: 14px;
+
+  background: white;
+
+  border-top:
+    1px solid #e5e7eb;
+}
+
+textarea {
+  width: 100%;
+
+  min-height:
+    82px;
+
+  max-height:
+    180px;
+
+  resize:
+    vertical;
+
+  border:
+    1px solid #cfd5dd;
+
+  border-radius:
+    10px;
+
+  padding:
+    11px;
+
+  font: inherit;
+}
+
+button {
+  width: 100%;
+
+  margin-top:
+    9px;
+
+  padding:
+    11px;
+
+  border: none;
+
+  border-radius:
+    9px;
+
+  background:
+    #245fd1;
+
+  color:
+    white;
+
+  font-weight:
+    700;
+
+  cursor:
+    pointer;
+}
+
+button.inline-button {
+  width: auto;
+
+  margin-top: 0;
+
+  padding:
+    8px 12px;
+}
+
+button.secondary {
+  background:
+    #6b7280;
+}
+
+button:disabled {
+  opacity:
+    0.55;
+
+  cursor:
+    not-allowed;
+}
+
+@media (
+  max-width:
+  950px
+) {
+
+  .layout {
+    grid-template-columns:
+      1fr;
+  }
+
+  .missions {
+    grid-template-columns:
+      1fr;
+  }
+
+  .assistant {
+    position: relative;
+
+    top: 0;
+
+    height:
+      620px;
+  }
+}
+
+</style>
+
 </head>
+
 
 <body>
 
+
 <header>
-  <h1>My Learning Hub</h1>
-  <p>A living research and learning system</p>
+
+  <h1>
+    IPF Learning Hub
+  </h1>
+
+  <p>
+    Learn enough to identify valuable IPF opportunities
+    and design the experiment that proves whether they are valuable.
+  </p>
+
 </header>
+
 
 <div class="layout">
 
-  <main class="main-column">
 
-    <section class="hero">
-      <span class="tag">CURRENT SUBJECT</span>
-
-      <h2 id="subjectTitle">
-        Idiopathic Pulmonary Fibrosis
-      </h2>
-
-      <p>
-        Goal: build scientific, clinical, commercial, BD and investment judgment
-        needed to evaluate fibrosis drugs, companies, transactions and opportunities.
-      </p>
-
-      <div class="progress-shell">
-        <div class="progress-bar" id="progressBar"></div>
-      </div>
-
-      <p id="progressText" class="small">
-        Loading learning plan...
-      </p>
-    </section>
+<main class="main-column">
 
 
-    <h2 class="section-title">🔥 What's New in IPF</h2>
+<section class="hero">
 
-    <section class="card news-card">
-      <h3>Latest IPF intelligence</h3>
+  <div class="hero-label">
+    NORTH STAR
+  </div>
 
-      <div id="newsList" class="news-list">
-        <p class="small">No news loaded yet.</p>
-      </div>
-    </section>
+  <h2>
+    Idiopathic Pulmonary Fibrosis
+  </h2>
 
+  <p>
+    Become capable of identifying high-value IPF assets,
+    companies and strategic opportunities — and designing
+    and leading an efficient Phase 2a program that generates
+    decision-quality evidence.
+  </p>
 
-    <h2 class="section-title">▶ Continue Learning</h2>
+  <div class="progress-shell">
 
-    <section class="card current-card">
-      <span class="tag" id="currentTag">CURRENT MODULE</span>
+    <div
+      class="progress-bar"
+      id="progressBar">
+    </div>
 
-      <h3 id="currentTitle" style="margin-top:10px;">
-        Loading...
-      </h3>
+  </div>
 
-      <p id="currentDescription"></p>
+  <p
+    id="progressText"
+    class="small">
 
-      <p>
-        <a
-          id="currentLink"
-          href="#"
-          target="_blank"
-          style="display:none;">
-          Open learning resource →
-        </a>
-      </p>
-    </section>
+    Loading learning plan...
 
+  </p>
 
-    <h2 class="section-title">📚 IPF Commercial & BD Learning Plan</h2>
-
-    <section class="card" id="learningPlan">
-      <p class="small">Loading learning plan...</p>
-    </section>
-
-  </main>
+</section>
 
 
-  <aside class="assistant-column">
 
-    <section class="assistant">
-
-      <div class="assistant-header">
-        <h2>💬 Learning Assistant</h2>
-
-        <p>
-          Ask about IPF, drugs, markets, deals, clinical data or your learning plan.
-        </p>
-
-        <div class="policy-box">
-          Normal chat never changes your learning plan.
-          Updates require an explicit request and your confirmation.
-        </div>
-      </div>
+<div class="missions">
 
 
-      <div class="chat" id="chat">
+  <section class="mission-card">
 
-        <div class="message assistant-message">
-          <strong>Learning Assistant</strong>
+    <div class="mission-number">
+      MISSION 1
+    </div>
 
-          <br><br>
+    <h3>
+      📈 Opportunity & Investment
+    </h3>
 
-          Examples:
+    <p>
+      Find attractive IPF assets, companies and strategic
+      opportunities — public or private.
+    </p>
 
-          <br><br>
+    <div class="mission-flow">
+      Universe → Evidence → Next experiment →
+      Commercial value → Financing →
+      Valuation / deal terms → Opportunity thesis
+    </div>
 
-          “Explain OFEV's commercial history.”
-          <br>
-          “Add actual lesson content to the market-size module.”
-          <br>
-          “Add the JAMA ziritaxestat paper as a resource.”
-          <br>
-          “Move pricing before epidemiology.”
-          <br>
-          “Mark market-size complete.”
-        </div>
-
-      </div>
+  </section>
 
 
-      <div class="composer">
+  <section class="mission-card">
 
-        <textarea
-          id="chatInput"
-          placeholder="Ask your Learning Assistant..."></textarea>
+    <div class="mission-number">
+      MISSION 2
+    </div>
 
-        <button id="sendButton">
-          Send
-        </button>
+    <h3>
+      🧪 Phase 2a Design & Execution
+    </h3>
 
-      </div>
+    <p>
+      Build the judgment and operating plan needed to lead
+      an efficient, decision-quality IPF Phase 2a program.
+    </p>
 
-    </section>
+    <div class="mission-flow">
+      Development question → Protocol →
+      Statistics → Sites / vendors →
+      Recruitment → Execution →
+      Go / no-go → Topline
+    </div>
 
-  </aside>
+  </section>
+
 
 </div>
 
 
+
+<h2 class="section-title">
+  🔥 What's New in IPF
+</h2>
+
+
+<section class="card news-card">
+
+  <div
+    id="newsList"
+    class="news-list">
+
+    <p class="small">
+      No news loaded yet.
+    </p>
+
+  </div>
+
+</section>
+
+
+
+<h2 class="section-title">
+  ▶ Continue Learning
+</h2>
+
+
+<section class="card current-card">
+
+  <span
+    class="tag"
+    id="currentTag">
+
+    CURRENT
+
+  </span>
+
+  <h3
+    id="currentTitle"
+    style="margin-top:10px;">
+
+    Loading...
+
+  </h3>
+
+  <p
+    id="currentDescription">
+  </p>
+
+  <p>
+
+    <a
+      id="currentLink"
+      href="#"
+      target="_blank"
+      style="display:none;">
+
+      Open first learning resource →
+
+    </a>
+
+  </p>
+
+</section>
+
+
+
+<h2 class="section-title">
+  📚 Learning Plan
+</h2>
+
+
+<section
+  class="card"
+  id="learningPlan">
+
+  <p class="small">
+    Loading learning plan...
+  </p>
+
+</section>
+
+
+</main>
+
+
+
+<aside class="assistant-column">
+
+
+<section class="assistant">
+
+
+<div class="assistant-header">
+
+  <h2>
+    💬 Learning Assistant
+  </h2>
+
+  <p>
+    Ask about assets, companies, trials, commercial strategy,
+    deals or Phase 2a execution.
+  </p>
+
+  <div class="policy-box">
+    Normal chat never changes your learning plan.
+    Updates require an explicit request and your confirmation.
+  </div>
+
+</div>
+
+
+
+<div
+  class="chat"
+  id="chat">
+
+
+  <div class="message assistant-message">
+
+    <strong>
+      Learning Assistant
+    </strong>
+
+    <br><br>
+
+    Try:
+
+    <br><br>
+
+    “Build the universe of IPF companies and assets.”
+
+    <br>
+
+    “What would make an IPF asset investible?”
+
+    <br>
+
+    “What must a strong Phase 2a trial prove?”
+
+    <br>
+
+    “Add a module on IPF catalyst mapping.”
+
+    <br>
+
+    “Add a Phase 2a protocol-design track.”
+
+    <br>
+
+    “Find resources on FVC variability in Phase 2 IPF trials.”
+
+  </div>
+
+
+</div>
+
+
+
+<div class="composer">
+
+
+<textarea
+  id="chatInput"
+  placeholder="Ask your Learning Assistant...">
+</textarea>
+
+
+<button id="sendButton">
+  Send
+</button>
+
+
+</div>
+
+
+</section>
+
+
+</aside>
+
+
+</div>
+
+
+
 <script>
+
 
 const WORKER_URL =
   "https://learning-assistant.kbptimetech.workers.dev";
 
-let currentPlan = null;
-let currentNews = [];
-let pendingChanges = null;
+
+let currentPlan =
+  null;
+
+
+let currentNews =
+  [];
+
+
+let pendingChanges =
+  null;
+
 
 const chatInput =
-  document.getElementById("chatInput");
+  document.getElementById(
+    "chatInput"
+  );
+
 
 const sendButton =
-  document.getElementById("sendButton");
+  document.getElementById(
+    "sendButton"
+  );
+
 
 const chat =
-  document.getElementById("chat");
-
-
-async function loadAll() {
-  await Promise.all([
-    loadPlan(),
-    loadNews()
-  ]);
-}
-
-
-async function loadPlan() {
-  try {
-    const response = await fetch(
-      WORKER_URL + "/plan"
-    );
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      throw new Error(
-        data.error || "Unable to load plan"
-      );
-    }
-
-    currentPlan = data.plan;
-
-    renderPlan();
-
-  } catch (error) {
-    console.error(error);
-
-    document.getElementById(
-      "learningPlan"
-    ).innerHTML =
-      "<p>Unable to load the learning plan.</p>";
-  }
-}
-
-
-async function loadNews() {
-  try {
-    const response = await fetch(
-      WORKER_URL + "/news"
-    );
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      throw new Error(
-        data.error || "Unable to load news"
-      );
-    }
-
-    currentNews =
-      data.news || [];
-
-    renderNews();
-
-  } catch (error) {
-    console.error(error);
-
-    document.getElementById(
-      "newsList"
-    ).innerHTML =
-      "<p class='small'>Unable to load news.</p>";
-  }
-}
-
-
-function getAllItems() {
-  if (!currentPlan) {
-    return [];
-  }
-
-  const items = [];
-
-  for (const section of currentPlan.sections || []) {
-    for (const item of section.items || []) {
-      items.push({
-        ...item,
-        sectionKey: section.sectionKey,
-        sectionTitle: section.title
-      });
-    }
-  }
-
-  return items;
-}
-
-
-function getCurrentItem() {
-  return (
-    getAllItems().find(
-      item => !item.completed
-    )
-    || null
+  document.getElementById(
+    "chat"
   );
-}
 
 
-function renderPlan() {
-  renderSubject();
-  renderProgress();
-  renderCurrentItem();
-  renderLearningPlan();
-}
 
+function escapeHtml(text) {
 
-function renderSubject() {
-  if (!currentPlan) {
-    return;
-  }
-
-  document.getElementById(
-    "subjectTitle"
-  ).textContent =
-    currentPlan.subject || "Learning Plan";
-}
-
-
-function renderProgress() {
-  const items = getAllItems();
-
-  const total = items.length;
-
-  const completed =
-    items.filter(
-      item => item.completed
-    ).length;
-
-  const percentage =
-    total === 0
-      ? 0
-      : Math.round(
-          (completed / total) * 100
-        );
-
-  document.getElementById(
-    "progressBar"
-  ).style.width =
-    percentage + "%";
-
-  document.getElementById(
-    "progressText"
-  ).textContent =
-    completed
-    + " of "
-    + total
-    + " learning items completed ("
-    + percentage
-    + "%)";
-}
-
-
-function renderCurrentItem() {
-  const item = getCurrentItem();
-
-  const tag =
-    document.getElementById("currentTag");
-
-  const title =
-    document.getElementById("currentTitle");
-
-  const description =
-    document.getElementById("currentDescription");
-
-  const link =
-    document.getElementById("currentLink");
-
-  if (!item) {
-    tag.textContent =
-      "COMPLETE";
-
-    title.textContent =
-      "Learning plan completed";
-
-    description.textContent =
-      "You have completed all items in the current learning plan.";
-
-    link.style.display =
-      "none";
-
-    return;
-  }
-
-  tag.textContent =
-    item.sectionTitle
-      ? item.sectionTitle.toUpperCase()
-      : "CURRENT MODULE";
-
-  title.textContent =
-    item.title;
-
-  description.textContent =
-    item.description || "";
-
-  const firstResource =
-    item.resources && item.resources.length
-      ? item.resources[0]
-      : null;
-
-  if (firstResource) {
-    link.href =
-      firstResource.url;
-
-    link.textContent =
-      "Open first learning resource →";
-
-    link.style.display =
-      "inline";
-  } else {
-    link.style.display =
-      "none";
-  }
-}
-
-
-function renderLearningPlan() {
-  const container =
-    document.getElementById(
-      "learningPlan"
+  return String(
+    text || ""
+  )
+    .replaceAll(
+      "&",
+      "&amp;"
+    )
+    .replaceAll(
+      "<",
+      "&lt;"
+    )
+    .replaceAll(
+      ">",
+      "&gt;"
+    )
+    .replaceAll(
+      '"',
+      "&quot;"
+    )
+    .replaceAll(
+      "'",
+      "&#039;"
     );
-
-  container.innerHTML = "";
-
-  if (!currentPlan) {
-    container.innerHTML =
-      "<p>Loading learning plan...</p>";
-
-    return;
-  }
-
-  for (const section of currentPlan.sections || []) {
-    const sectionWrapper =
-      document.createElement("div");
-
-    sectionWrapper.className =
-      "plan-section";
-
-    const heading =
-      document.createElement("h3");
-
-    heading.textContent =
-      section.title;
-
-    sectionWrapper.appendChild(
-      heading
-    );
-
-    if (!section.items || section.items.length === 0) {
-      const empty =
-        document.createElement("p");
-
-      empty.className =
-        "small";
-
-      empty.textContent =
-        "No learning items yet.";
-
-      sectionWrapper.appendChild(
-        empty
-      );
-    }
-
-    for (const item of section.items || []) {
-      sectionWrapper.appendChild(
-        createLearningItem(item)
-      );
-    }
-
-    container.appendChild(
-      sectionWrapper
-    );
-  }
 }
 
-  function escapeHtml(text) {
-  return String(text || "")
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
-}
 
 
 function renderSimpleMarkdown(text) {
-  const lines = escapeHtml(text)
-    .split(/\r?\n/);
 
-  let html = "";
-  let inList = false;
+  const lines =
+    escapeHtml(text)
+      .split(
+        /\r?\n/
+      );
+
+
+  let html =
+    "";
+
+
+  let inList =
+    false;
+
 
   function formatInline(line) {
+
     return line
       .replace(
         /\*\*(.+?)\*\*/g,
@@ -825,317 +1014,959 @@ function renderSimpleMarkdown(text) {
         /\*(.+?)\*/g,
         "<em>$1</em>"
       );
+
   }
 
-  for (const rawLine of lines) {
-    const line = rawLine.trim();
+
+  for (
+    const rawLine
+    of lines
+  ) {
+
+    const line =
+      rawLine.trim();
+
 
     if (!line) {
+
       if (inList) {
-        html += "</ul>";
-        inList = false;
+
+        html +=
+          "</ul>";
+
+        inList =
+          false;
+
       }
 
-      html += "<br>";
       continue;
     }
 
-    if (line.startsWith("### ")) {
+
+    if (
+      line.startsWith(
+        "### "
+      )
+    ) {
+
       if (inList) {
-        html += "</ul>";
-        inList = false;
+
+        html +=
+          "</ul>";
+
+        inList =
+          false;
+
       }
 
       html +=
         "<h4>"
-        + formatInline(line.slice(4))
+        + formatInline(
+            line.slice(4)
+          )
         + "</h4>";
 
       continue;
     }
 
-    if (line.startsWith("## ")) {
+
+    if (
+      line.startsWith(
+        "## "
+      )
+    ) {
+
       if (inList) {
-        html += "</ul>";
-        inList = false;
+
+        html +=
+          "</ul>";
+
+        inList =
+          false;
+
       }
 
       html +=
         "<h3>"
-        + formatInline(line.slice(3))
+        + formatInline(
+            line.slice(3)
+          )
         + "</h3>";
 
       continue;
     }
 
+
     if (
       line.startsWith("- ")
-      || line.startsWith("* ")
+      ||
+      line.startsWith("* ")
     ) {
+
       if (!inList) {
-        html += "<ul>";
-        inList = true;
+
+        html +=
+          "<ul>";
+
+        inList =
+          true;
+
       }
 
       html +=
         "<li>"
-        + formatInline(line.slice(2))
+        + formatInline(
+            line.slice(2)
+          )
         + "</li>";
 
       continue;
     }
 
+
     if (inList) {
-      html += "</ul>";
-      inList = false;
+
+      html +=
+        "</ul>";
+
+      inList =
+        false;
+
     }
+
 
     html +=
       "<p>"
-      + formatInline(line)
+      + formatInline(
+          line
+        )
       + "</p>";
+
   }
 
+
   if (inList) {
-    html += "</ul>";
+
+    html +=
+      "</ul>";
+
   }
+
 
   return html;
 }
 
 
-function createLearningItem(item) {
+
+async function loadAll() {
+
+  await Promise.all([
+    loadPlan(),
+    loadNews()
+  ]);
+
+}
+
+
+
+async function loadPlan() {
+
+  try {
+
+    const response =
+      await fetch(
+        WORKER_URL
+        + "/plan"
+      );
+
+
+    const data =
+      await response.json();
+
+
+    if (!response.ok) {
+
+      throw new Error(
+        data.error
+        || "Unable to load plan"
+      );
+
+    }
+
+
+    currentPlan =
+      data.plan;
+
+
+    renderPlan();
+
+  } catch (error) {
+
+    console.error(
+      error
+    );
+
+
+    document
+      .getElementById(
+        "learningPlan"
+      )
+      .innerHTML =
+        "<p>Unable to load the learning plan.</p>";
+
+  }
+
+}
+
+
+
+async function loadNews() {
+
+  try {
+
+    const response =
+      await fetch(
+        WORKER_URL
+        + "/news"
+      );
+
+
+    const data =
+      await response.json();
+
+
+    if (!response.ok) {
+
+      throw new Error(
+        data.error
+        || "Unable to load news"
+      );
+
+    }
+
+
+    currentNews =
+      data.news || [];
+
+
+    renderNews();
+
+  } catch (error) {
+
+    console.error(
+      error
+    );
+
+  }
+
+}
+
+
+
+function getAllItems() {
+
+  if (!currentPlan) {
+
+    return [];
+
+  }
+
+
+  const items =
+    [];
+
+
+  for (
+    const section
+    of currentPlan.sections || []
+  ) {
+
+    for (
+      const item
+      of section.items || []
+    ) {
+
+      items.push({
+
+        ...item,
+
+        sectionKey:
+          section.sectionKey,
+
+        sectionTitle:
+          section.title
+
+      });
+
+    }
+
+  }
+
+
+  return items;
+
+}
+
+
+
+function getCurrentItem() {
+
+  return (
+    getAllItems()
+      .find(
+        item =>
+          !item.completed
+      )
+    ||
+    null
+  );
+
+}
+
+
+
+function renderPlan() {
+
+  renderProgress();
+
+  renderCurrentItem();
+
+  renderLearningPlan();
+
+}
+
+
+
+function renderProgress() {
+
+  const items =
+    getAllItems();
+
+
+  const total =
+    items.length;
+
+
+  const complete =
+    items.filter(
+      item =>
+        item.completed
+    ).length;
+
+
+  const pct =
+    total
+      ? Math.round(
+          complete
+          / total
+          * 100
+        )
+      : 0;
+
+
+  document
+    .getElementById(
+      "progressBar"
+    )
+    .style
+    .width =
+      pct + "%";
+
+
+  document
+    .getElementById(
+      "progressText"
+    )
+    .textContent =
+      complete
+      + " of "
+      + total
+      + " learning items completed ("
+      + pct
+      + "%)";
+
+}
+
+
+
+function renderCurrentItem() {
+
+  const item =
+    getCurrentItem();
+
+
+  const tag =
+    document.getElementById(
+      "currentTag"
+    );
+
+
+  const title =
+    document.getElementById(
+      "currentTitle"
+    );
+
+
+  const description =
+    document.getElementById(
+      "currentDescription"
+    );
+
+
+  const link =
+    document.getElementById(
+      "currentLink"
+    );
+
+
+  if (!item) {
+
+    tag.textContent =
+      "COMPLETE";
+
+
+    title.textContent =
+      "Learning plan completed";
+
+
+    description.textContent =
+      "All current items are complete.";
+
+
+    link.style.display =
+      "none";
+
+
+    return;
+
+  }
+
+
+  tag.textContent =
+    item.sectionTitle
+      .toUpperCase();
+
+
+  title.textContent =
+    item.title;
+
+
+  description.textContent =
+    item.description || "";
+
+
+  const firstResource =
+    item.resources
+    &&
+    item.resources.length
+      ? item.resources[0]
+      : null;
+
+
+  if (firstResource) {
+
+    link.href =
+      firstResource.url;
+
+
+    link.style.display =
+      "inline";
+
+  } else {
+
+    link.style.display =
+      "none";
+
+  }
+
+}
+
+
+
+function renderLearningPlan() {
+
+  const container =
+    document.getElementById(
+      "learningPlan"
+    );
+
+
+  container.innerHTML =
+    "";
+
+
+  if (!currentPlan) {
+
+    return;
+
+  }
+
+
+  for (
+    const section
+    of currentPlan.sections || []
+  ) {
+
+    const wrapper =
+      document.createElement(
+        "div"
+      );
+
+
+    wrapper.className =
+      "plan-section";
+
+
+    const heading =
+      document.createElement(
+        "h3"
+      );
+
+
+    heading.textContent =
+      section.title;
+
+
+    wrapper.appendChild(
+      heading
+    );
+
+
+    if (
+      !section.items
+      ||
+      !section.items.length
+    ) {
+
+      const empty =
+        document.createElement(
+          "p"
+        );
+
+
+      empty.className =
+        "small";
+
+
+      empty.textContent =
+        "No learning items yet.";
+
+
+      wrapper.appendChild(
+        empty
+      );
+
+    }
+
+
+    for (
+      const item
+      of section.items || []
+    ) {
+
+      wrapper.appendChild(
+        createLearningItem(
+          item
+        )
+      );
+
+    }
+
+
+    container.appendChild(
+      wrapper
+    );
+
+  }
+
+}
+
+
+
+function createLearningItem(
+  item
+) {
+
   const wrapper =
-    document.createElement("div");
+    document.createElement(
+      "div"
+    );
+
 
   wrapper.className =
     "learning-item"
-    + (
+    +
+    (
       item.completed
         ? " completed"
         : ""
     );
 
+
   const header =
-    document.createElement("div");
+    document.createElement(
+      "div"
+    );
+
 
   header.className =
     "learning-header";
 
+
   const checkbox =
-    document.createElement("input");
+    document.createElement(
+      "input"
+    );
+
 
   checkbox.type =
     "checkbox";
 
+
   checkbox.checked =
     !!item.completed;
+
 
   checkbox.addEventListener(
     "change",
     () => {
+
       checkbox.checked =
         !!item.completed;
 
+
       addMessage(
-        `To change "${item.title}", ask me explicitly to update the learning plan.`,
+        `Ask me to mark "${item.title}" complete or incomplete.`,
         "assistant"
       );
+
     }
   );
 
+
   const main =
-    document.createElement("div");
+    document.createElement(
+      "div"
+    );
 
-  const strong =
-    document.createElement("strong");
 
-  strong.textContent =
+  const title =
+    document.createElement(
+      "strong"
+    );
+
+
+  title.textContent =
     item.title;
 
+
   const description =
-    document.createElement("div");
+    document.createElement(
+      "div"
+    );
+
 
   description.className =
     "small";
 
+
   description.textContent =
     item.description || "";
 
-  main.appendChild(strong);
-  main.appendChild(description);
 
-  header.appendChild(checkbox);
-  header.appendChild(main);
+  main.appendChild(
+    title
+  );
 
-  wrapper.appendChild(header);
+
+  main.appendChild(
+    description
+  );
+
+
+  header.appendChild(
+    checkbox
+  );
+
+
+  header.appendChild(
+    main
+  );
+
+
+  wrapper.appendChild(
+    header
+  );
+
 
   const hasDetails =
     item.content
-    || item.whyItMatters
-    || (
+    ||
+    item.whyItMatters
+    ||
+    (
       item.resources
-      && item.resources.length
+      &&
+      item.resources.length
     );
 
+
   if (hasDetails) {
+
     const details =
-      document.createElement("details");
+      document.createElement(
+        "details"
+      );
+
 
     const summary =
-      document.createElement("summary");
+      document.createElement(
+        "summary"
+      );
+
 
     summary.textContent =
       "View lesson & resources";
 
-    details.appendChild(summary);
+
+    details.appendChild(
+      summary
+    );
+
 
     if (item.content) {
+
       const content =
-        document.createElement("div");
+        document.createElement(
+          "div"
+        );
+
 
       content.className =
         "lesson-content";
 
+
       content.innerHTML =
         renderSimpleMarkdown(
           item.content
-          );
+        );
 
-      details.appendChild(content);
+
+      details.appendChild(
+        content
+      );
+
     }
 
-    if (item.whyItMatters) {
+
+    if (
+      item.whyItMatters
+    ) {
+
       const why =
-        document.createElement("div");
+        document.createElement(
+          "div"
+        );
+
 
       why.className =
         "why-box";
 
-      const label =
-        document.createElement("strong");
 
-      label.textContent =
-        "Why it matters";
-
-      const body =
-        document.createElement("div");
-
-      body.style.marginTop =
-        "5px";
-
-      body.innerHTML =
+      why.innerHTML =
+        "<strong>Why it matters</strong>"
+        +
         renderSimpleMarkdown(
-        item.whyItMatters
-          );
+          item.whyItMatters
+        );
 
-      why.appendChild(label);
-      why.appendChild(body);
 
-      details.appendChild(why);
+      details.appendChild(
+        why
+      );
+
     }
+
 
     if (
       item.resources
-      && item.resources.length
+      &&
+      item.resources.length
     ) {
-      const resourceList =
-        document.createElement("div");
 
-      resourceList.className =
+      const list =
+        document.createElement(
+          "div"
+        );
+
+
+      list.className =
         "resource-list";
 
+
       const label =
-        document.createElement("strong");
+        document.createElement(
+          "strong"
+        );
+
 
       label.textContent =
         "Resources";
 
-      resourceList.appendChild(label);
 
-      for (const resource of item.resources) {
+      list.appendChild(
+        label
+      );
+
+
+      for (
+        const resource
+        of item.resources
+      ) {
+
         const row =
-          document.createElement("div");
+          document.createElement(
+            "div"
+          );
+
 
         row.className =
           "resource-item";
 
-        const anchor =
-          document.createElement("a");
 
-        anchor.href =
+        const link =
+          document.createElement(
+            "a"
+          );
+
+
+        link.href =
           resource.url;
 
-        anchor.target =
+
+        link.target =
           "_blank";
 
-        anchor.textContent =
+
+        link.textContent =
           resource.title;
 
-        row.appendChild(anchor);
+
+        row.appendChild(
+          link
+        );
+
 
         if (
           resource.sourceName
-          || resource.resourceType
+          ||
+          resource.resourceType
         ) {
+
           const meta =
-            document.createElement("span");
+            document.createElement(
+              "span"
+            );
+
 
           meta.className =
             "small";
 
+
           meta.textContent =
             " — "
-            + [
-                resource.sourceName,
-                resource.resourceType
-              ]
+            +
+            [
+              resource.sourceName,
+              resource.resourceType
+            ]
               .filter(Boolean)
               .join(" · ");
 
-          row.appendChild(meta);
+
+          row.appendChild(
+            meta
+          );
+
         }
 
-        resourceList.appendChild(row);
+
+        list.appendChild(
+          row
+        );
+
       }
 
-      details.appendChild(resourceList);
+
+      details.appendChild(
+        list
+      );
+
     }
 
-    wrapper.appendChild(details);
+
+    wrapper.appendChild(
+      details
+    );
+
   }
 
+
   return wrapper;
+
 }
 
 
+
 function renderNews() {
+
   const container =
     document.getElementById(
       "newsList"
     );
 
-  container.innerHTML = "";
 
-  if (!currentNews.length) {
+  container.innerHTML =
+    "";
+
+
+  if (
+    !currentNews.length
+  ) {
+
     container.innerHTML =
-      "<p class='small'>No news items yet. Automated news collection is the next step.</p>";
+      "<p class='small'>No news items yet.</p>";
+
 
     return;
+
   }
 
-  for (const item of currentNews) {
+
+  for (
+    const item
+    of currentNews
+  ) {
+
     const card =
-      document.createElement("div");
+      document.createElement(
+        "div"
+      );
+
 
     card.className =
       "news-item";
 
+
     const meta =
-      document.createElement("div");
+      document.createElement(
+        "div"
+      );
+
 
     meta.className =
       "news-meta";
+
 
     meta.textContent =
       [
@@ -1143,206 +1974,339 @@ function renderNews() {
         item.sourceName,
         item.publishedDate
       ]
-      .filter(Boolean)
-      .join(" · ");
+        .filter(Boolean)
+        .join(" · ");
+
 
     const title =
-      document.createElement("strong");
+      document.createElement(
+        "strong"
+      );
+
 
     title.textContent =
       item.headline;
 
-    const summary =
-      document.createElement("p");
 
-    summary.textContent =
-      item.summary || "";
+    card.appendChild(
+      meta
+    );
 
-    card.appendChild(meta);
-    card.appendChild(title);
-    card.appendChild(summary);
 
-    if (item.whyItMatters) {
+    card.appendChild(
+      title
+    );
+
+
+    if (item.summary) {
+
+      const summary =
+        document.createElement(
+          "p"
+        );
+
+
+      summary.textContent =
+        item.summary;
+
+
+      card.appendChild(
+        summary
+      );
+
+    }
+
+
+    if (
+      item.whyItMatters
+    ) {
+
       const why =
-        document.createElement("p");
+        document.createElement(
+          "p"
+        );
+
 
       why.className =
         "small";
+
 
       why.textContent =
         "Why it matters: "
         + item.whyItMatters;
 
-      card.appendChild(why);
+
+      card.appendChild(
+        why
+      );
+
     }
 
+
     const link =
-      document.createElement("a");
+      document.createElement(
+        "a"
+      );
+
 
     link.href =
       item.url;
 
+
     link.target =
       "_blank";
+
 
     link.textContent =
       "Read source →";
 
-    card.appendChild(link);
 
-    container.appendChild(card);
+    card.appendChild(
+      link
+    );
+
+
+    container.appendChild(
+      card
+    );
+
   }
+
 }
 
 
-function addMessage(text, type) {
+
+function addMessage(
+  text,
+  type
+) {
+
   const message =
-    document.createElement("div");
+    document.createElement(
+      "div"
+    );
+
 
   message.className =
     "message "
-    + (
+    +
+    (
       type === "user"
         ? "user-message"
         : "assistant-message"
     );
 
+
   message.textContent =
     text;
 
-  chat.appendChild(message);
+
+  chat.appendChild(
+    message
+  );
+
 
   chat.scrollTop =
     chat.scrollHeight;
+
 }
 
 
-function addProposal(answer, changes) {
+
+function addProposal(
+  answer,
+  changes
+) {
+
   const wrapper =
-    document.createElement("div");
+    document.createElement(
+      "div"
+    );
+
 
   wrapper.className =
     "message assistant-message";
 
+
   const text =
-    document.createElement("div");
+    document.createElement(
+      "div"
+    );
+
 
   text.textContent =
-    answer
-    || "Proposed learning-plan change:";
+    answer;
 
-  wrapper.appendChild(text);
+
+  wrapper.appendChild(
+    text
+  );
+
 
   const actions =
-    document.createElement("div");
+    document.createElement(
+      "div"
+    );
+
 
   actions.className =
     "proposal-actions";
 
+
   const confirm =
-    document.createElement("button");
+    document.createElement(
+      "button"
+    );
+
 
   confirm.className =
     "inline-button";
 
+
   confirm.textContent =
     "Confirm changes";
 
+
   const cancel =
-    document.createElement("button");
+    document.createElement(
+      "button"
+    );
+
 
   cancel.className =
     "inline-button secondary";
 
+
   cancel.textContent =
     "Cancel";
+
 
   confirm.addEventListener(
     "click",
     async () => {
+
       confirm.disabled =
         true;
 
+
       cancel.disabled =
         true;
+
 
       await applyChanges(
         changes
       );
 
+
       pendingChanges =
         null;
+
     }
   );
+
 
   cancel.addEventListener(
     "click",
     () => {
+
       confirm.disabled =
         true;
+
 
       cancel.disabled =
         true;
 
+
       pendingChanges =
         null;
+
 
       addMessage(
         "No changes were made.",
         "assistant"
       );
+
     }
   );
 
-  actions.appendChild(confirm);
-  actions.appendChild(cancel);
 
-  wrapper.appendChild(actions);
+  actions.appendChild(
+    confirm
+  );
 
-  chat.appendChild(wrapper);
+
+  actions.appendChild(
+    cancel
+  );
+
+
+  wrapper.appendChild(
+    actions
+  );
+
+
+  chat.appendChild(
+    wrapper
+  );
+
 
   chat.scrollTop =
     chat.scrollHeight;
+
 }
 
 
-async function applyChanges(changes) {
+
+async function applyChanges(
+  changes
+) {
+
   try {
+
     const response =
       await fetch(
-        WORKER_URL + "/apply",
+        WORKER_URL
+        + "/apply",
         {
-          method: "POST",
+
+          method:
+            "POST",
 
           headers: {
             "Content-Type":
               "application/json"
           },
 
-          body: JSON.stringify({
-            changes
-          })
+          body:
+            JSON.stringify({
+              changes
+            })
+
         }
       );
+
 
     const data =
       await response.json();
 
-    if (!response.ok) {
-      console.error(data);
 
-      addMessage(
-        "Something went wrong applying the learning-plan changes.",
-        "assistant"
+    if (!response.ok) {
+
+      throw new Error(
+        data.error
+        ||
+        "Unable to apply changes"
       );
 
-      return;
     }
+
 
     currentPlan =
       data.plan;
 
+
     renderPlan();
+
 
     addMessage(
       "Learning plan updated.",
@@ -1350,88 +2314,126 @@ async function applyChanges(changes) {
     );
 
   } catch (error) {
-    console.error(error);
+
+    console.error(
+      error
+    );
+
 
     addMessage(
       "I couldn't apply the learning-plan changes.",
       "assistant"
     );
+
   }
+
 }
 
 
+
 async function sendMessage() {
+
   const text =
     chatInput.value.trim();
 
+
   if (!text) {
+
     return;
+
   }
+
 
   addMessage(
     text,
     "user"
   );
 
+
   chatInput.value =
     "";
+
 
   sendButton.disabled =
     true;
 
+
   sendButton.textContent =
     "Thinking...";
 
+
   try {
+
     const response =
       await fetch(
-        WORKER_URL + "/chat",
+        WORKER_URL
+        + "/chat",
         {
-          method: "POST",
+
+          method:
+            "POST",
 
           headers: {
             "Content-Type":
               "application/json"
           },
 
-          body: JSON.stringify({
-            message: text
-          })
+          body:
+            JSON.stringify({
+              message:
+                text
+            })
+
         }
       );
+
 
     const data =
       await response.json();
 
-    if (!response.ok) {
-      console.error(data);
 
-      addMessage(
-        "Something went wrong connecting to the Learning Assistant.",
-        "assistant"
+    if (!response.ok) {
+
+      throw new Error(
+        data.error
+        ||
+        "Assistant error"
       );
 
-      return;
     }
 
-    if (data.type === "proposal") {
+
+    if (
+      data.type ===
+      "proposal"
+    ) {
+
       pendingChanges =
         data.changes || [];
+
 
       addProposal(
         data.answer,
         pendingChanges
       );
+
     } else {
+
       addMessage(
         data.answer
-        || "No response received.",
+        ||
+        "No response received.",
         "assistant"
       );
+
     }
 
   } catch (error) {
-    console.error(error);
+
+    console.error(
+      error
+    );
+
 
     addMessage(
       "I couldn't reach the Learning Assistant.",
@@ -1439,15 +2441,21 @@ async function sendMessage() {
     );
 
   } finally {
+
     sendButton.disabled =
       false;
+
 
     sendButton.textContent =
       "Send";
 
+
     chatInput.focus();
+
   }
+
 }
+
 
 
 sendButton.addEventListener(
@@ -1456,23 +2464,36 @@ sendButton.addEventListener(
 );
 
 
+
 chatInput.addEventListener(
   "keydown",
   event => {
+
     if (
-      event.key === "Enter"
-      && !event.shiftKey
+      event.key ===
+        "Enter"
+      &&
+      !event.shiftKey
     ) {
+
       event.preventDefault();
+
+
       sendMessage();
+
     }
+
   }
 );
 
 
+
 loadAll();
+
 
 </script>
 
+
 </body>
+
 </html>
